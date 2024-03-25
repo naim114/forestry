@@ -26,15 +26,15 @@ class SpeciesGroupSeeder extends Seeder
         ]);
 
         SpeciesGroup::create([
-            'name' => 'Dip Non Commercial',
+            'name' => 'Dip NonCommercial',
         ]);
 
         SpeciesGroup::create([
-            'name' => 'Non Dip Commercial',
+            'name' => 'NonDip Commercial',
         ]);
 
         SpeciesGroup::create([
-            'name' => 'Non Dip Non Commercial',
+            'name' => 'NonDip NonCommercial',
         ]);
     }
 }
