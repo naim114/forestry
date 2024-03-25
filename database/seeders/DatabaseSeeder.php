@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call(SpeciesGroupSeeder::class);
+        $this->call(SpeciesSeeder::class);
 
         Model::reguard();
     }
