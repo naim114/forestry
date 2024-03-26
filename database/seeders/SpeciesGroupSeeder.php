@@ -36,5 +36,9 @@ class SpeciesGroupSeeder extends Seeder
         SpeciesGroup::create([
             'name' => 'NonDip NonCommercial',
         ]);
+
+        SpeciesGroup::create([
+            'name' => 'Others',
+        ]);
     }
 }
