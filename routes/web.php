@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TreeController;
+use App\Http\Controllers\SpeciesController;
+use App\Http\Controllers\SpeciesGroupController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +18,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('dashboard.index');
 })->name('index');
+
+Route::get('/species',
+    [SpeciesController::class, 'index']
+)->name('species.index');
+
+Route::get('/species_groups',
+    [SpeciesGroupController::class, 'index']
+)->name('species_groups.index');
+
+Route::get('/trees',
+    [TreeController::class, 'index']
+)->name('trees.index');

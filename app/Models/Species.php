@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SpeciesGroup;
 
 class Species extends Model
 {
@@ -17,4 +18,9 @@ class Species extends Model
         'comm_gr',
         'dip',
     ];
+
+    public function speciesGroup()
+    {
+        return $this->belongsTo(SpeciesGroup::class, 'species_groups');
+    }
 }
