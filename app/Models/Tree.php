@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Species;
+use App\Models\SpeciesGroup;
 
 class Tree extends Model
 {
@@ -23,4 +25,14 @@ class Tree extends Model
         'volume_m3',
         'status',
     ];
+
+    public function species()
+    {
+        return $this->belongsTo(Species::class, 'species');
+    }
+
+    public function speciesGroup()
+    {
+        return $this->belongsTo(SpeciesGroup::class, 'species_groups');
+    }
 }

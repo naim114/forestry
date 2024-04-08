@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SpeciesGroup;
+use App\Models\Tree;
 
 class Species extends Model
 {
@@ -22,5 +23,10 @@ class Species extends Model
     public function speciesGroup()
     {
         return $this->belongsTo(SpeciesGroup::class, 'species_groups');
+    }
+
+    public function trees(): HasMany
+    {
+        return $this->hasMany(Tree::class);
     }
 }

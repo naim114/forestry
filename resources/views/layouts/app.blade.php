@@ -62,6 +62,10 @@
                                 <a class="nav-link" href="{{ route('species_groups.index') }}">Species Group</a>
                             </nav>
                         </div>
+                        <a class="nav-link" href="{{ route('trees.index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
+                            New Forest
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -101,7 +105,7 @@
         crossorigin="anonymous"></script>
     <script src="js/datatables-simple-demo.js"></script>
 
-    @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>
