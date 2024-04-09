@@ -31,11 +31,6 @@ class TreeDataTable extends DataTable
      */
     public function query(Tree $model): QueryBuilder
     {
-        dd('adasda');
-
-    //     $query = $model->newQuery();
-    // dd($query->toSql(), $query->getBindings());
-
         return $model->newQuery();
     }
 
@@ -73,17 +68,17 @@ class TreeDataTable extends DataTable
                   ->width(60)
                   ->addClass('text-center'),
             Column::make('id'),
-            // Column::make('BlockX'),
-            // Column::make('BlockY'),
-            // Column::make('x'),
-            // Column::make('y'),
-            // Column::make('TreeNum'),
-            // Column::make('species'),
-            // Column::make('species_groups'),
-            // Column::make('diameter_dbh_cm'),
-            // Column::make('diameter_class'),
-            // Column::make('stem_height_m'),
-            // Column::make('volume_m3'),
+            Column::make('BlockX'),
+            Column::make('BlockY'),
+            Column::make('x'),
+            Column::make('y'),
+            Column::make('TreeNum'),
+            Column::make('species'),
+            Column::make('species_groups'),
+            Column::make('diameter_dbh_cm'),
+            Column::make('diameter_class'),
+            Column::make('stem_height_m'),
+            Column::make('volume_m3'),
             Column::make('status'),
             Column::make('created_at'),
             Column::make('updated_at'),
