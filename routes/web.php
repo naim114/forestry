@@ -30,3 +30,11 @@ Route::get('/species_groups',
 Route::get('/trees',
     [TreeController::class, 'index']
 )->name('trees.index');
+
+Route::get('/trees/perha',
+    [TreeController::class, 'perha']
+)->name('trees.perha');
+
+Route::get('/trees/stand',
+    [TreeController::class, 'stand']
+)->name('trees.stand');

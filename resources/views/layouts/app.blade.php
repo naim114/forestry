@@ -9,7 +9,7 @@
     <meta name="author" content="" />
     <title>@yield('page-title') - Forestry</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
@@ -62,10 +62,20 @@
                                 <a class="nav-link" href="{{ route('species_groups.index') }}">Species Group</a>
                             </nav>
                         </div>
-                        <a class="nav-link" href="{{ route('trees.index') }}">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
                             <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
                             New Forest
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
+                        <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ route('trees.index') }}">Trees</a>
+                                <a class="nav-link" href="{{ route('trees.perha') }}">Tress Perha</a>
+                                <a class="nav-link" href="{{ route('trees.stand') }}">Stand Table</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
@@ -97,13 +107,13 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
     </script>
-    <script src="js/scripts.js"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
+    <script src="{{ asset('assets/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('assets/demo/chart-bar-demo.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
         crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
+    <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
 
     @stack('scripts')
 </body>
