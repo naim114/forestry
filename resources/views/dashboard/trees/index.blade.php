@@ -12,6 +12,7 @@
             <table id="datatablesSimple">
                 <thead>
                     <tr>
+                        <th>id</th>
                         <th>BlockX</th>
                         <th>BlockY</th>
                         <th>x</th>
@@ -30,6 +31,7 @@
                 </thead>
                 <tfoot>
                     <tr>
+                        <th>id</th>
                         <th>BlockX</th>
                         <th>BlockY</th>
                         <th>x</th>
@@ -49,6 +51,7 @@
                 <tbody>
                     @foreach ($trees as $tree)
                         <tr>
+                            <td>{{ $tree->id }}</td>
                             <td>{{ $tree->BlockX }}</td>
                             <td>{{ $tree->BlockY }}</td>
                             <td>{{ $tree->x }}</td>
