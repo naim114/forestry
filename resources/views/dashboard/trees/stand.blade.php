@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'asdasd')
+@section('page-title', 'Stand Table')
 
 @section('content')
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Trees in Forest
+            Stand Table
         </div>
         <div class="card-body">
             <table id="datatablesSimple">
