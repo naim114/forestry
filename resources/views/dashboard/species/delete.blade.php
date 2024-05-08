@@ -1,0 +1,49 @@
+@extends('layouts.app')
+
+@section('page-title', 'Delete Species')
+
+@section('content')
+    <div class="card">
+        <div class="card-body">
+            <form>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-sm-10">
+                        <input name="" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input name="" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">Species Group</label>
+                    <div class="col-sm-10">
+                        <input name="" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">Roy Class</label>
+                    <div class="col-sm-10">
+                        <input name="" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">Comm Gr</label>
+                    <div class="col-sm-10">
+                        <input name="" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">Dip</label>
+                    <div class="col-sm-10">
+                        <input name="" type="text" class="form-control">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            </form>
+        </div>
+    </div>
+@stop
