@@ -36,4 +36,34 @@ class TreeController extends Controller
 
         return view('dashboard.trees.stand', compact('treePerha', 'count'));
     }
+
+    public function view_add()
+    {
+        return view('dashboard.trees.add');
+    }
+
+    public function view_update()
+    {
+        return view('dashboard.trees.update');
+    }
+
+    public function view_delete()
+    {
+        return view('dashboard.trees.delete');
+    }
+
+    public function add()
+    {
+        # code...
+    }
+
+    public function update()
+    {
+        # code...
+    }
+
+    public function delete()
+    {
+        # code...
+    }
 }

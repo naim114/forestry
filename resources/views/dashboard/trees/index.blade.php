@@ -3,6 +3,8 @@
 @section('page-title', 'Trees in Forest')
 
 @section('content')
+    <a class="btn btn-primary mb-4" href="{{ route('trees.view.add') }}">+ Add Tree</a>
+
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
@@ -27,6 +29,7 @@
                         <th>Status</th>
                         <th>Created at</th>
                         <th>Edited at</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -46,6 +49,7 @@
                         <th>Status</th>
                         <th>Created at</th>
                         <th>Edited at</th>
+                        <th>Action</th>
                     </tr>
                 </tfoot>
                 <tbody>
@@ -66,6 +70,10 @@
                             <td>{{ $tree->status }}</td>
                             <td>{{ $tree->created_at }}</td>
                             <td>{{ $tree->updated_at }}</td>
+                            <td>
+                                <a class="btn btn-primary mb-2" href="{{ route('trees.view.update') }}">Edit</a>
+                                <a class="btn btn-danger" href="{{ route('trees.view.delete') }}">Delete</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

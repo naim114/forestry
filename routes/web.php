@@ -56,6 +56,18 @@ Route::get('/trees',
     [TreeController::class, 'index']
 )->name('trees.index');
 
+Route::get('/trees/add',
+    [TreeController::class, 'view_add']
+)->name('trees.view.add');
+
+Route::get('/trees/update',
+    [TreeController::class, 'view_update']
+)->name('trees.view.update');
+
+Route::get('/trees/delete',
+    [TreeController::class, 'view_delete']
+)->name('trees.view.delete');
+
 Route::get('/trees/perha',
     [TreeController::class, 'perha']
 )->name('trees.perha');
