@@ -44,8 +44,10 @@
                             <td>{{ $s->comm_gr }}</td>
                             <td>{{ $s->dip }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ route('species.view.update') }}">Edit</a>
-                                <a class="btn btn-danger" href="{{ route('species.view.delete') }}">Delete</a>
+                                <a class="btn btn-primary"
+                                    href="{{ route('species.view.update', ['id' => $s->id]) }}">Edit</a>
+                                <a class="btn btn-danger"
+                                    href="{{ route('species.view.delete', ['id' => $s->id]) }}">Delete</a>
                             </td>
                         </tr>
                     @endforeach

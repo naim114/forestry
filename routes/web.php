@@ -31,7 +31,7 @@ Route::post('/species/add',
     [SpeciesController::class, 'add']
 )->name('species.add');
 
-Route::get('/species/update',
+Route::get('/species/update/{id}',
     [SpeciesController::class, 'view_update']
 )->name('species.view.update');
 
@@ -39,7 +39,7 @@ Route::post('/species/update',
     [SpeciesController::class, 'update']
 )->name('species.update');
 
-Route::get('/species/delete',
+Route::get('/species/delete/{id}',
     [SpeciesController::class, 'view_delete']
 )->name('species.view.delete');
 

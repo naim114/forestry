@@ -22,16 +22,20 @@ class SpeciesController extends Controller
         return view('dashboard.species.add', compact('groups'));
     }
 
-    public function view_update()
+    public function view_update($id)
     {
         $groups = SpeciesGroup::all();
 
-        return view('dashboard.species.update', compact('groups'));
+        $species = Species::find($id);
+
+        return view('dashboard.species.update', compact('groups', 'species'));
     }
 
-    public function view_delete()
+    public function view_delete($id)
     {
-        return view('dashboard.species.delete');
+        $species = Species::find($id);
+
+        return view('dashboard.species.delete', compact('species'));
     }
 
     public function add(Request $request)
@@ -44,6 +48,7 @@ class SpeciesController extends Controller
     public function update(Request $request)
     {
         $update = $request->all();
+        unset($update['_token']);
 
         Species::where('id', $update['id'])
             ->update($update);
