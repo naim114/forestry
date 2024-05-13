@@ -19,28 +19,46 @@ class SpeciesGroupController extends Controller
         return view('dashboard.species_groups.add');
     }
 
-    public function view_update()
+    public function view_update($id)
     {
-        return view('dashboard.species_groups.update');
+        $sg = SpeciesGroup::find($id);
+
+        return view('dashboard.species_groups.update', compact('sg'));
     }
 
-    public function view_delete()
+    public function view_delete($id)
     {
-        return view('dashboard.species_groups.delete');
+        $sg = SpeciesGroup::find($id);
+
+        return view('dashboard.species_groups.delete', compact('sg'));
     }
 
-    public function add()
+    public function add(Request $request)
     {
-        # code...
+        SpeciesGroup::create($request->all());
+
+        return back()->with('success', 'Species Group successfully added!');
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        # code...
+        $update = $request->all();
+        unset($update['_token']);
+
+        SpeciesGroup::where('id', $update['id'])
+            ->update($update);
+
+        return back()->with('success', 'Species Group successfully updated!');
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
-        # code...
+        $sg = SpeciesGroup::where('id', $request->id)
+            ->first();
+
+        SpeciesGroup::where('id', $sg->id)
+            ->delete();
+
+        return redirect()->route('species_groups.index')->with('success', 'Species Group successfully deleted!');
     }
 }

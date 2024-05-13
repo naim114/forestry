@@ -59,7 +59,7 @@ Route::post('/species_groups/add',
     [SpeciesGroupController::class, 'add']
 )->name('species_groups.add');
 
-Route::get('/species_groups/update',
+Route::get('/species_groups/update/{id}',
     [SpeciesGroupController::class, 'view_update']
 )->name('species_groups.view.update');
 
@@ -67,11 +67,11 @@ Route::post('/species_groups/update',
     [SpeciesGroupController::class, 'update']
 )->name('species_groups.update');
 
-Route::get('/species_groups/delete',
+Route::get('/species_groups/delete/{id}',
     [SpeciesGroupController::class, 'view_delete']
 )->name('species_groups.view.delete');
 
-Route::get('/species_groups/delete',
+Route::post('/species_groups/delete',
     [SpeciesGroupController::class, 'delete']
 )->name('species_groups.delete');
 

@@ -35,8 +35,10 @@
                             <td>{{ $sg->created_at }}</td>
                             <td>{{ $sg->updated_at }}</td>
                             <td>
-                                <a class="btn btn-primary" href="{{ route('species_groups.view.update') }}">Edit</a>
-                                <a class="btn btn-danger" href="{{ route('species_groups.view.delete') }}">Delete</a>
+                                <a class="btn btn-primary"
+                                    href="{{ route('species_groups.view.update', ['id' => $sg->id]) }}">Edit</a>
+                                <a class="btn btn-danger"
+                                    href="{{ route('species_groups.view.delete', ['id' => $sg->id]) }}">Delete</a>
                             </td>
                         </tr>
                     @endforeach
