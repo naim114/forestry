@@ -63,5 +63,7 @@ class SpeciesController extends Controller
 
         Species::where('id', $request->id)
             ->delete();
+
+        return redirect()->route('species.index')->with('success', 'Species successfully deleted!');
     }
 }
