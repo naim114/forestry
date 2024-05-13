@@ -52,9 +52,9 @@ class TreeController extends Controller
         return view('dashboard.trees.delete');
     }
 
-    public function add()
+    public function add(Request $request)
     {
-        # code...
+
     }
 
     public function update()

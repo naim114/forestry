@@ -34,18 +34,29 @@ class SpeciesController extends Controller
         return view('dashboard.species.delete');
     }
 
-    public function add()
+    public function add(Request $request)
     {
-        # code...
+        Species::create($request->all());
+
+        return back()->with('success', 'Species successfully added!');
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        # code...
+        $update = $request->all();
+
+        Species::where('id', $update['id'])
+            ->update($update);
+
+        return back()->with('success', 'Species successfully updated!');
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
-        # code...
+        $species = Species::where('id', $request->id)
+            ->first();
+
+        Species::where('id', $request->id)
+            ->delete();
     }
 }

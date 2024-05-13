@@ -87,7 +87,9 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4 mb-4">@yield('page-title')</h1>
+                    <div class="mb-4"></div>
+                    @include('layouts.components.alerts')
+                    <h1 class="mb-4">@yield('page-title')</h1>
                     @yield('content')
                 </div>
             </main>
