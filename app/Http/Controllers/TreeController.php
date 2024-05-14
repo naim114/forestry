@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tree;
+use App\Models\Species;
+use App\Models\SpeciesGroup;
 use Illuminate\Http\Request;
 use App\DataTables\TreeDataTable;
 
@@ -39,31 +41,54 @@ class TreeController extends Controller
 
     public function view_add()
     {
-        return view('dashboard.trees.add');
+        $species = Species::all();
+        $species_groups = SpeciesGroup::all();
+
+        return view('dashboard.trees.add', compact('species', 'species_groups'));
     }
 
-    public function view_update()
+    public function view_update($id)
     {
-        return view('dashboard.trees.update');
+        $tree = Tree::find($id);
+        $species = Species::all();
+        $species_groups = SpeciesGroup::all();
+
+        return view('dashboard.trees.update', compact('tree', 'species', 'species_groups'));
     }
 
-    public function view_delete()
+    public function view_delete($id)
     {
-        return view('dashboard.trees.delete');
+        $tree = Tree::find($id);
+
+        return view('dashboard.trees.delete', compact('tree'));
     }
 
     public function add(Request $request)
     {
+        Tree::create($request->all());
 
+        return back()->with('success', 'Tree successfully added!');
     }
 
-    public function update()
+    public function update(Request $request)
     {
-        # code...
+        $update = $request->all();
+        unset($update['_token']);
+
+        Tree::where('id', $update['id'])
+            ->update($update);
+
+        return back()->with('success', 'Tree successfully updated!');
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
-        # code...
+        $tree = Tree::where('id', $request->id)
+            ->first();
+
+        Tree::where('id', $request->id)
+            ->delete();
+
+        return redirect()->route('trees.index')->with('success', 'Tree successfully deleted!');
     }
 }

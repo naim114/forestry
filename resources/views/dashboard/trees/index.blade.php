@@ -71,8 +71,10 @@
                             <td>{{ $tree->created_at }}</td>
                             <td>{{ $tree->updated_at }}</td>
                             <td>
-                                <a class="btn btn-primary mb-2" href="{{ route('trees.view.update') }}">Edit</a>
-                                <a class="btn btn-danger" href="{{ route('trees.view.delete') }}">Delete</a>
+                                <a class="btn btn-primary mb-2"
+                                    href="{{ route('trees.view.update', ['id' => $tree->id]) }}">Edit</a>
+                                <a class="btn btn-danger"
+                                    href="{{ route('trees.view.delete', ['id' => $tree->id]) }}">Delete</a>
                             </td>
                         </tr>
                     @endforeach

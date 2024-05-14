@@ -87,7 +87,7 @@ Route::post('/trees/add',
     [TreeController::class, 'add']
 )->name('trees.add');
 
-Route::get('/trees/update',
+Route::get('/trees/update/{id}',
     [TreeController::class, 'view_update']
 )->name('trees.view.update');
 
@@ -95,7 +95,7 @@ Route::post('/trees/update',
     [TreeController::class, 'update']
 )->name('trees.update');
 
-Route::get('/trees/delete',
+Route::get('/trees/delete/{id}',
     [TreeController::class, 'view_delete']
 )->name('trees.view.delete');
 
