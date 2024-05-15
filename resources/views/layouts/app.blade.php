@@ -83,6 +83,7 @@
                                 <a class="nav-link" href="{{ route('trees.index') }}">Trees</a>
                                 <a class="nav-link" href="{{ route('trees.perha') }}">Tress Perha</a>
                                 <a class="nav-link" href="{{ route('trees.stand') }}">Stand Table</a>
+                                <a class="nav-link" href="{{ route('trees.felltree') }}">Fell Tree</a>
                                 <a class="nav-link" href="{{ route('trees.year30') }}">Year 30</a>
                             </nav>
                         </div>

@@ -92,6 +92,16 @@ class TreeController extends Controller
         return redirect()->route('trees.index')->with('success', 'Tree successfully deleted!');
     }
 
+    public function felltree()
+    {
+        $trees = Tree::where('status', 'CUT')
+            ->where('BlockX', 1)
+            ->where('BlockY', 1)
+            ->get();
+
+        return view('dashboard.trees.felltree', compact('trees'));
+    }
+
     public function year30()
     {
         $species_groups = SpeciesGroup::all();
