@@ -86,6 +86,49 @@
                     </div>
                 </div>
 
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">PROD</label>
+                    <div class="col-sm-10">
+                        <input name="PROD" type="number" step=".01" class="form-control"
+                            value="{{ $tree->PROD }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">cut_angle</label>
+                    <div class="col-sm-10">
+                        <input name="cut_angle" type="number" step=".01" class="form-control"
+                            value="{{ $tree->cut_angle }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">DMG_stem</label>
+                    <div class="col-sm-10">
+                        <input name="DMG_stem" type="number" step=".01" class="form-control"
+                            value="{{ $tree->DMG_stem }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">DMG_crown</label>
+                    <div class="col-sm-10">
+                        <input name="DMG_crown" type="number" step=".01" class="form-control"
+                            value="{{ $tree->DMG_crown }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">D30</label>
+                    <div class="col-sm-10">
+                        <input name="D30" type="number" step=".01" class="form-control"
+                            value="{{ $tree->D30 }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group row mb-4">
+                    <label class="col-sm-2 col-form-label">V30</label>
+                    <div class="col-sm-10">
+                        <input name="V30" type="number" step=".01" class="form-control"
+                            value="{{ $tree->V30 }}" readonly>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-danger">Confirm Delete</button>
             </form>
         </div>

@@ -24,6 +24,12 @@ class Tree extends Model
         'stem_height_m',
         'volume_m3',
         'status',
+        'PROD',
+        'cut_angle',
+        'DMG_stem',
+        'DMG_crown',
+        'D30',
+        'V30',
     ];
 
     public function species()

@@ -27,6 +27,12 @@
                         <th>stem_height_m</th>
                         <th>volume_m3</th>
                         <th>Status</th>
+                        <th>PROD</th>
+                        <th>cut_angle</th>
+                        <th>DMG_stem</th>
+                        <th>DMG_crown</th>
+                        <th>D30</th>
+                        <th>V30</th>
                         <th>Created at</th>
                         <th>Edited at</th>
                         <th>Action</th>
@@ -47,6 +53,12 @@
                         <th>stem_height_m</th>
                         <th>volume_m3</th>
                         <th>Status</th>
+                        <th>PROD</th>
+                        <th>cut_angle</th>
+                        <th>DMG_stem</th>
+                        <th>DMG_crown</th>
+                        <th>D30</th>
+                        <th>V30</th>
                         <th>Created at</th>
                         <th>Edited at</th>
                         <th>Action</th>
@@ -68,6 +80,12 @@
                             <td>{{ $tree->stem_height_m }}</td>
                             <td>{{ $tree->volume_m3 }}</td>
                             <td>{{ $tree->status }}</td>
+                            <td>{{ $tree->PROD }}</td>
+                            <td>{{ $tree->cut_angle }}</td>
+                            <td>{{ $tree->DMG_stem }}</td>
+                            <td>{{ $tree->DMG_crown }}</td>
+                            <td>{{ $tree->D30 }}</td>
+                            <td>{{ $tree->V30 }}</td>
                             <td>{{ $tree->created_at }}</td>
                             <td>{{ $tree->updated_at }}</td>
                             <td>
