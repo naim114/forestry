@@ -25,7 +25,7 @@
 <body class="sb-nav-fixed bg">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Forestry</a>
+        <a class="navbar-brand ps-3" href="index.html">Forest System</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
@@ -74,7 +74,7 @@
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
                             <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
-                            New Forest
+                            Forest
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
                         <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne"
@@ -83,13 +83,14 @@
                                 <a class="nav-link" href="{{ route('trees.index') }}">Trees</a>
                                 <a class="nav-link" href="{{ route('trees.perha') }}">Tress Perha</a>
                                 <a class="nav-link" href="{{ route('trees.stand') }}">Stand Table</a>
+                                <a class="nav-link" href="{{ route('trees.year30') }}">Year 30</a>
                             </nav>
                         </div>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
                     <div class="small">Logged in as:</div>
-                    Start Bootstrap
+                    Faiz Akasyah
                 </div>
             </nav>
         </div>

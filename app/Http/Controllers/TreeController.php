@@ -91,4 +91,38 @@ class TreeController extends Controller
 
         return redirect()->route('trees.index')->with('success', 'Tree successfully deleted!');
     }
+
+    public function year30()
+    {
+        $species_groups = SpeciesGroup::all();
+        $data = [];
+
+        foreach ($species_groups as $index => $group) {
+            $trees = Tree::where('BlockX', 1)
+                ->where('BlockY', 1)
+                ->where('species_groups', $index + 1)
+                ->get();
+
+            $v = $trees->sum('volume_m3');
+            $n = $trees->count();
+            $p = $trees->sum('PROD');
+            $d = $trees->where('status', 'VICTIM')->sum(function ($tree) {
+                return $tree->DMG_crown + $tree->DMG_stem;
+            });
+            $g30 = $trees->sum('V30');
+            $p30 = $trees->where('D30', '>', 45)->where('sp_group', '<=', 5)->where('sp_group', '!=', 4)->sum('V30');
+
+            $data[] = [
+                'group' => $group,
+                'volume' => $v,
+                'number' => $n,
+                'production' => $p,
+                'damage' => $d,
+                'growth30' => $g30,
+                'production30' => $p30,
+            ];
+        }
+
+        return view('dashboard.trees.year30', compact('data'));
+    }
 }
