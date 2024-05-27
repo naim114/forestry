@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Dashboard')
+@section('page-title', 'Welcome to Forestry System')
 
 @section('content')
     <div class="row">

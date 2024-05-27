@@ -135,4 +135,34 @@ class TreeController extends Controller
 
         return view('dashboard.trees.year30', compact('data'));
     }
+
+    public function map()
+    {
+
+        // Fetch trees with diameter greater than 30
+        $trees = Tree::where('diameter_dbh_cm', '>', 30)->get();
+
+        // Process the data points
+        $dataPoints = [];
+        foreach ($trees as $tree) {
+            $x = $tree->x;
+            $y = $tree->y;
+
+            if ($tree->BlockX > 1) {
+                $x = ($tree->BlockX - 1) * 100 + $tree->x;
+            }
+            if ($tree->BlockY > 1) {
+                $y = ($tree->BlockY - 1) * 100 + $tree->y;
+            }
+
+            $dataPoints[] = [
+                'x' => $x,
+                'y' => $y,
+                'id' => $tree->TreeNum,
+                'status' => $tree->status
+            ];
+        }
+
+        return view('dashboard.trees.map', ['dataPoints' => json_encode($dataPoints, JSON_NUMERIC_CHECK)]);
+    }
 }

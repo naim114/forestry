@@ -25,7 +25,7 @@
 <body class="sb-nav-fixed bg">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Forest System</a>
+        <a class="navbar-brand ps-3" href="index.html">Forestry System</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
@@ -85,6 +85,7 @@
                                 <a class="nav-link" href="{{ route('trees.stand') }}">Stand Table</a>
                                 <a class="nav-link" href="{{ route('trees.felltree') }}">Fell Tree</a>
                                 <a class="nav-link" href="{{ route('trees.year30') }}">Year 30</a>
+                                <a class="nav-link" href="{{ route('trees.map') }}">Tree Distribution</a>
                             </nav>
                         </div>
                     </div>

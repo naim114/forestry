@@ -118,3 +118,7 @@ Route::get('/trees/felltree',
 Route::get('/trees/year30',
     [TreeController::class, 'year30']
 )->name('trees.year30');
+
+Route::get('/map',
+    [TreeController::class, 'map']
+)->name('trees.map');
