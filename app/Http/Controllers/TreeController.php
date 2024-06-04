@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Models\Tree;
 use App\Models\Species;
 use App\Models\SpeciesGroup;
@@ -147,5 +148,86 @@ class TreeController extends Controller
         }
 
         return view('dashboard.trees.map', ['dataPoints' => json_encode($dataPoints, JSON_NUMERIC_CHECK)]);
+    }
+
+    public function summary()
+    {
+        $speciesGroups = [
+            "Mersawa",
+            "Keruing",
+            "Dipterocarp Commercial",
+            "Dipterocarp Non-Commercial",
+            "Non-dipterocarp Commercial",
+            "Non-dipterocarp Non-Commercial",
+            "Others",
+        ];
+
+        $data = [];
+        $totalVolume = 0;
+        $totalCount = 0;
+        $totalProduction = 0;
+
+        foreach ($speciesGroups as $i => $speciesGroup) {
+            $volume = 0;
+            $number = 0;
+            $production = 0;
+            $damage = 0;
+            $growth30 = 0;
+            $production30 = 0;
+
+            // Replace with your actual database connection logic (using Laravel's model or query builder)
+            $trees = Tree::where('species_groups', $i + 1)
+                ->select('volume_m3', 'prod', 'dmg_crown', 'dmg_stem', 'status', 'species_groups', 'd30', 'v30')
+                ->get();
+
+            foreach ($trees as $tree) {
+                $volume += $tree->volume_m3;
+                $number++;
+                $production += $tree->prod;
+
+                if ($tree->status === 'VICTIM') {
+                    $damage += $tree->dmg_crown + $tree->dmg_stem;
+                }
+
+                $growth30 += $tree->v30;
+
+                if ($tree->d30 > 45 && $tree->species_groups <= 5 && $tree->species_groups != 4) {
+                    $production30 += $tree->v30;
+                }
+            }
+
+            $data[] = [
+                'species_group' => $speciesGroup,
+                'volume' => round($volume, 4),
+                'number' => $number,
+                'production' => round($production, 4),
+                'damage' => round($damage, 4),
+                'growth30' => round($growth30, 4),
+                'production30' => round($production30, 4),
+            ];
+
+            $totalVolume += $volume;
+            $totalCount += $number;
+            $totalProduction += $production;
+        }
+
+        // Calculate total damage for cut trees
+        $totalDamage = Tree::where('status', 'CUT')
+            ->select(DB::raw('SUM(dmg_stem + dmg_crown) AS dmg'))
+            ->first()
+            ->dmg; // Assuming you have a `dmg` attribute in the result
+
+        // Calculate total V30
+        $totalV30 = Tree::select(DB::raw('SUM(v30) AS v30'))->first()->v30;
+
+        // Calculate total P30
+        $totalP30 = Tree::where('d30', '>', 45)
+            ->where('species_groups', '<=', 5)
+            ->where('species_groups', '!=', 4)
+            ->select(DB::raw('SUM(v30) AS p30'))
+            ->first()
+            ->p30;
+
+        return view('dashboard.trees.summary', compact('data', 'totalVolume', 'totalCount', 'totalProduction', 'totalDamage', 'totalV30', 'totalP30'));
     }
 }

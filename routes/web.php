@@ -120,6 +120,10 @@ Route::get('/map',
     [TreeController::class, 'map']
 )->name('trees.map');
 
+Route::get('/summary',
+    [TreeController::class, 'summary']
+)->name('trees.summary');
+
 Route::get('/stand/volume',
     [StandTableController::class, 'volume']
 )->name('stand.volume');

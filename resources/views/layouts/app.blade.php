@@ -85,10 +85,12 @@
                                 <a class="nav-link" href="{{ route('trees.felltree') }}">Fell Tree</a>
                                 <a class="nav-link" href="{{ route('trees.year30') }}">Year 30</a>
                                 <a class="nav-link" href="{{ route('trees.map') }}">Tree Distribution</a>
+                                <a class="nav-link" href="{{ route('trees.summary') }}">Summary</a>
                             </nav>
                         </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts3" aria-expanded="false" aria-controls="collapseLayouts3">
+                            data-bs-target="#collapseLayouts3" aria-expanded="false"
+                            aria-controls="collapseLayouts3">
                             <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
                             Stand Table
                             <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
