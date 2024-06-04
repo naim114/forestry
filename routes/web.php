@@ -15,9 +15,9 @@ use App\Http\Controllers\SpeciesGroupController;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.index');
-})->name('index');
+Route::get('/',
+    [SpeciesController::class, 'dashboard']
+)->name('index');
 
 Route::get('/species',
     [SpeciesController::class, 'index']

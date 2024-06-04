@@ -3,11 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Species;
+use App\Models\Tree;
 use App\Models\SpeciesGroup;
 use Illuminate\Http\Request;
 
 class SpeciesController extends Controller
 {
+    public function dashboard()
+    {
+        // Fetch data and group by species group
+        $speciesData = Species::with('speciesGroup')
+            ->get()
+            ->groupBy('species_groups')
+            ->map(function ($group) {
+                return [
+                    'groupName' => $group->first()->speciesGroup->name,
+                    'count' => $group->count(),
+                ];
+            });
+
+        // Fetch data and group by species
+        $treeData = Tree::select('species', \DB::raw('count(*) as total'))
+            ->groupBy('species')
+            ->get();
+
+        // Pass data to the view
+        return view('dashboard.index', ['speciesData' => $speciesData, 'treeData' => $treeData]);
+    }
+
     public function index()
     {
         $species = Species::all();
