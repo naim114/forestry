@@ -97,4 +97,96 @@ class StandTableController extends Controller
 
         return view('dashboard.stand.production0', compact('speciesGroups', 'totals'));
     }
+
+     public function damage()
+    {
+        $speciesGroups = 7;
+        $diameterGroups = 5;
+        $stemData = [];
+        $crownData = [];
+
+        $totaltotalstem = 0;
+        $totaltotaltree_stem = 0;
+        $totaltotalcrown = 0;
+        $totaltotaltree_crown = 0;
+
+        for ($i = 1; $i <= $speciesGroups; $i++) {
+            $stemGroup = ['group' => $i, 'damage' => [], 'num' => [], 'total_damage' => 0, 'total_num' => 0];
+            $crownGroup = ['group' => $i, 'damage' => [], 'num' => [], 'total_damage' => 0, 'total_num' => 0];
+
+            $totalstem = 0;
+            $totaltree_stem = 0;
+            $totalcrown = 0;
+            $totaltree_crown = 0;
+
+            for ($j = 1; $j <= $diameterGroups; $j++) {
+                // Fetching stem damage
+                $stemResult = DB::table('trees')
+                    ->selectRaw('ROUND(SUM(`DMG_stem`), 4) AS stem')
+                    ->where('DMG_stem', '>', 0)
+                    ->where('species_groups', $i)
+                    ->where('diameter_class', $j)
+                    ->where('status', 'VICTIM')
+                    ->first();
+
+                $stemGroup['damage'][] = $stemResult->stem ?? 0;
+                $totalstem += $stemResult->stem ?? 0;
+
+                $stemCountResult = DB::table('trees')
+                    ->selectRaw('ROUND(COUNT(*), 4) AS tree_count')
+                    ->where('DMG_stem', '>', 0)
+                    ->where('species_groups', $i)
+                    ->where('diameter_class', $j)
+                    ->where('status', 'VICTIM')
+                    ->first();
+
+                $stemGroup['num'][] = $stemCountResult->tree_count ?? 0;
+                $totaltree_stem += $stemCountResult->tree_count ?? 0;
+
+                // Fetching crown damage
+                $crownResult = DB::table('trees')
+                    ->selectRaw('ROUND(SUM(`DMG_crown`), 4) AS crown')
+                    ->where('DMG_crown', '>', 0)
+                    ->where('species_groups', $i)
+                    ->where('diameter_class', $j)
+                    ->where('status', 'VICTIM')
+                    ->first();
+
+                $crownGroup['damage'][] = $crownResult->crown ?? 0;
+                $totalcrown += $crownResult->crown ?? 0;
+
+                $crownCountResult = DB::table('trees')
+                    ->selectRaw('ROUND(COUNT(*), 4) AS tree_count')
+                    ->where('DMG_crown', '>', 0)
+                    ->where('species_groups', $i)
+                    ->where('diameter_class', $j)
+                    ->where('status', 'VICTIM')
+                    ->first();
+
+                $crownGroup['num'][] = $crownCountResult->tree_count ?? 0;
+                $totaltree_crown += $crownCountResult->tree_count ?? 0;
+            }
+
+            $stemGroup['total_damage'] = $totalstem / 100;
+            $stemGroup['total_num'] = $totaltree_stem / 100;
+            $stemData[] = $stemGroup;
+            $totaltotalstem += $totalstem;
+            $totaltotaltree_stem += $totaltree_stem;
+
+            $crownGroup['total_damage'] = $totalcrown / 100;
+            $crownGroup['total_num'] = $totaltree_crown / 100;
+            $crownData[] = $crownGroup;
+            $totaltotalcrown += $totalcrown;
+            $totaltotaltree_crown += $totaltree_crown;
+        }
+
+        $totals = [
+            'total_stem' => $totaltotalstem / 100,
+            'total_tree_stem' => $totaltotaltree_stem / 100,
+            'total_crown' => $totaltotalcrown / 100,
+            'total_tree_crown' => $totaltotaltree_crown / 100,
+        ];
+
+        return view('dashboard.stand.damage', compact('stemData', 'crownData', 'totals'));
+    }
 }

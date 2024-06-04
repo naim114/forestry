@@ -98,6 +98,7 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('stand.volume') }}">Volume</a>
                                 <a class="nav-link" href="{{ route('stand.production0') }}">Production 0</a>
+                                <a class="nav-link" href="{{ route('stand.damage') }}">Damage</a>
                             </nav>
                         </div>
                     </div>

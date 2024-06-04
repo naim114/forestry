@@ -127,3 +127,7 @@ Route::get('/stand/volume',
 Route::get('/stand/production0',
     [StandTableController::class, 'production0']
 )->name('stand.production0');
+
+Route::get('/stand/damage',
+    [StandTableController::class, 'damage']
+)->name('stand.damage');
