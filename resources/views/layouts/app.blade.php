@@ -97,6 +97,7 @@
                             data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('stand.volume') }}">Volume</a>
+                                <a class="nav-link" href="{{ route('stand.production0') }}">Production 0</a>
                             </nav>
                         </div>
                     </div>

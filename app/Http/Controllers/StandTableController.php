@@ -7,7 +7,7 @@ use DB;
 
 class StandTableController extends Controller
 {
- public function volume()
+    public function volume()
     {
         $trees = DB::table('trees')
             ->select(
@@ -30,5 +30,71 @@ class StandTableController extends Controller
             ->get();
 
         return view('dashboard.stand.volume', compact('trees'));
+    }
+
+    public function production0()
+    {
+        $sp_group = 7; // Number of species groups
+        $d_group = 5;  // Number of diameter ranges
+
+        $speciesGroups = [];
+
+        for ($i = 1; $i <= $sp_group; $i++) {
+            $speciesGroup = ['group' => $i, 'prod' => [], 'num' => []];
+
+            for ($j = 1; $j <= $d_group; $j++) {
+                // Fetch production data
+                $prod = DB::table('trees')
+                    ->select(
+                        DB::raw('ROUND(SUM(PROD), 4) AS prod'),
+                        DB::raw("CASE
+                            WHEN diameter_dbh_cm BETWEEN 5 AND 14.999 THEN 1
+                            WHEN diameter_dbh_cm BETWEEN 15 AND 29.999 THEN 2
+                            WHEN diameter_dbh_cm BETWEEN 30 AND 44.999 THEN 3
+                            WHEN diameter_dbh_cm BETWEEN 45 AND 59.999 THEN 4
+                            ELSE 5
+                        END AS diameter_range")
+                    )
+                    ->where('species_groups', $i)
+                    ->where('status', 'CUT')
+                    ->groupBy('diameter_range')
+                    ->having('diameter_range', $j)
+                    ->first();
+
+                $speciesGroup['prod'][] = $prod ? round($prod->prod / 100, 4) : 0;
+
+                // Fetch tree count data
+                $treeCount = DB::table('trees')
+                    ->select(
+                        DB::raw('COUNT(*) AS tree_count'),
+                        DB::raw("CASE
+                            WHEN diameter_dbh_cm BETWEEN 5 AND 14.999 THEN 1
+                            WHEN diameter_dbh_cm BETWEEN 15 AND 29.999 THEN 2
+                            WHEN diameter_dbh_cm BETWEEN 30 AND 44.999 THEN 3
+                            WHEN diameter_dbh_cm BETWEEN 45 AND 59.999 THEN 4
+                            ELSE 5
+                        END AS diameter_range")
+                    )
+                    ->where('species_groups', $i)
+                    ->where('status', 'CUT')
+                    ->groupBy('diameter_range')
+                    ->having('diameter_range', $j)
+                    ->first();
+
+                $speciesGroup['num'][] = $treeCount ? round($treeCount->tree_count / 100, 4) : 0;
+            }
+
+            $speciesGroup['total_prod'] = array_sum($speciesGroup['prod']);
+            $speciesGroup['total_num'] = array_sum($speciesGroup['num']);
+
+            $speciesGroups[] = $speciesGroup;
+        }
+
+        $totals = [
+            'total_prod' => array_sum(array_column($speciesGroups, 'total_prod')),
+            'total_num' => array_sum(array_column($speciesGroups, 'total_num'))
+        ];
+
+        return view('dashboard.stand.production0', compact('speciesGroups', 'totals'));
     }
 }
