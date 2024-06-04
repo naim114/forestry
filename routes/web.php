@@ -5,6 +5,7 @@ use App\Http\Controllers\TreeController;
 use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\SpeciesGroupController;
 use App\Http\Controllers\StandTableController;
+use App\Http\Controllers\ProcessController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -143,3 +144,7 @@ Route::get('/stand/growth30',
 Route::get('/stand/production30',
     [StandTableController::class, 'production30']
 )->name('stand.production30');
+
+Route::get('/process',
+    [ProcessController::class, 'index']
+)->name('process');

@@ -55,7 +55,7 @@
                     <div class="nav">
                         {{-- <div class="sb-sidenav-menu-heading">Core</div> --}}
                         <a class="nav-link" href="{{ route('index') }}">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
                             Dashboard
                         </a>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -105,6 +105,10 @@
                                 <a class="nav-link" href="{{ route('stand.production30') }}">Production 30</a>
                             </nav>
                         </div>
+                        <a class="nav-link" href="{{ route('process') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
+                            Process
+                        </a>
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
