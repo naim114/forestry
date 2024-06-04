@@ -189,4 +189,150 @@ class StandTableController extends Controller
 
         return view('dashboard.stand.damage', compact('stemData', 'crownData', 'totals'));
     }
+
+    public function growth30()
+    {
+        $speciesGroups = 7;
+        $diameterGroups = 5;
+        $growthData = [];
+
+        $totalTotalGrowth = 0;
+        $totalTotalTree = 0;
+
+        for ($i = 1; $i <= $speciesGroups; $i++) {
+            $growthGroup = ['group' => $i, 'growth' => [], 'num' => [], 'total_growth' => 0, 'total_num' => 0];
+
+            $totalGrowth = 0;
+            $totalTree = 0;
+
+            for ($j = 1; $j <= $diameterGroups; $j++) {
+                $growthResult = DB::table('trees')
+                    ->selectRaw('ROUND(SUM(`V30`), 4) AS growth, diameter_range')
+                    ->fromSub(function ($query) use ($i) {
+                        $query->selectRaw('`V30`, CASE
+                            WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                            WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                            WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                            WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                            ELSE 5
+                            END AS diameter_range')
+                            ->from('trees')
+                            ->where('species_groups', $i);
+                    }, 'subquery')
+                    ->where('diameter_range', $j)
+                    ->first();
+
+                $growthGroup['growth'][] = $growthResult->growth ?? 0;
+                $totalGrowth += $growthResult->growth ?? 0;
+
+                $countResult = DB::table('trees')
+                    ->selectRaw('ROUND(COUNT(*), 4) AS tree_count, diameter_range')
+                    ->fromSub(function ($query) use ($i) {
+                        $query->selectRaw('`V30`, CASE
+                            WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                            WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                            WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                            WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                            ELSE 5
+                            END AS diameter_range')
+                            ->from('trees')
+                            ->where('species_groups', $i);
+                    }, 'subquery')
+                    ->where('diameter_range', $j)
+                    ->first();
+
+                $growthGroup['num'][] = $countResult->tree_count ?? 0;
+                $totalTree += $countResult->tree_count ?? 0;
+            }
+
+            $growthGroup['total_growth'] = $totalGrowth / 100;
+            $growthGroup['total_num'] = $totalTree / 100;
+            $growthData[] = $growthGroup;
+            $totalTotalGrowth += $totalGrowth;
+            $totalTotalTree += $totalTree;
+        }
+
+        $totals = [
+            'total_growth' => $totalTotalGrowth / 100,
+            'total_tree' => $totalTotalTree / 100,
+        ];
+
+        return view('dashboard.stand.growth30', compact('growthData', 'totals'));
+    }
+
+    public function production30()
+    {
+        $speciesGroups = 7;
+        $diameterGroups = 5;
+        $productionData = [];
+
+        $totalTotalProd = 0;
+        $totalTotalTree = 0;
+
+        for ($i = 1; $i <= $speciesGroups; $i++) {
+            $productionGroup = ['group' => $i, 'prod' => [], 'num' => [], 'total_prod' => 0, 'total_num' => 0];
+
+            $totalProd = 0;
+            $totalTree = 0;
+
+            for ($j = 1; $j <= $diameterGroups; $j++) {
+                $prodResult = DB::table('trees')
+                    ->selectRaw('ROUND(SUM(`V30`), 4) AS prod, diameter_range')
+                    ->fromSub(function ($query) use ($i) {
+                        $query->selectRaw('`V30`, `D30`, `status`, `species_groups`, CASE
+                            WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                            WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                            WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                            WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                            ELSE 5
+                            END AS diameter_range')
+                            ->from('trees')
+                            ->where('species_groups', $i);
+                    }, 'subquery')
+                    ->where('diameter_range', $j)
+                    ->where('D30', '>', 45)
+                    ->where('species_groups', '<=', 5)
+                    ->where('species_groups', '!=', 4)
+                    ->first();
+
+                $productionGroup['prod'][] = $prodResult->prod ?? 0;
+                $totalProd += $prodResult->prod ?? 0;
+
+                $countResult = DB::table('trees')
+                    ->selectRaw('COUNT(*) AS tree_count, diameter_range')
+                    ->fromSub(function ($query) use ($i) {
+                        $query->selectRaw('`V30`, `D30`, `status`, `species_groups`, CASE
+                            WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                            WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                            WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                            WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                            ELSE 5
+                            END AS diameter_range')
+                            ->from('trees')
+                            ->where('species_groups', $i);
+                    }, 'subquery')
+                    ->where('diameter_range', $j)
+                    ->where('D30', '>', 45)
+                    ->where('species_groups', '<=', 5)
+                    ->where('species_groups', '!=', 4)
+                    ->first();
+
+                $productionGroup['num'][] = $countResult->tree_count ?? 0;
+                $totalTree += $countResult->tree_count ?? 0;
+            }
+
+            $productionGroup['total_prod'] = $totalProd / 100;
+            $productionGroup['total_num'] = $totalTree / 100;
+            $productionData[] = $productionGroup;
+            $totalTotalProd += $totalProd;
+            $totalTotalTree += $totalTree;
+        }
+
+        $totals = [
+            'total_prod' => $totalTotalProd / 100,
+            'total_tree' => $totalTotalTree / 100,
+        ];
+
+        return view('dashboard.stand.production30', compact('productionData', 'totals'));
+    }
 }

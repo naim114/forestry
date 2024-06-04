@@ -131,3 +131,11 @@ Route::get('/stand/production0',
 Route::get('/stand/damage',
     [StandTableController::class, 'damage']
 )->name('stand.damage');
+
+Route::get('/stand/growth30',
+    [StandTableController::class, 'growth30']
+)->name('stand.growth30');
+
+Route::get('/stand/production30',
+    [StandTableController::class, 'production30']
+)->name('stand.production30');

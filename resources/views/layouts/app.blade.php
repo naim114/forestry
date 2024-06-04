@@ -99,6 +99,8 @@
                                 <a class="nav-link" href="{{ route('stand.volume') }}">Volume</a>
                                 <a class="nav-link" href="{{ route('stand.production0') }}">Production 0</a>
                                 <a class="nav-link" href="{{ route('stand.damage') }}">Damage</a>
+                                <a class="nav-link" href="{{ route('stand.growth30') }}">Growth 30</a>
+                                <a class="nav-link" href="{{ route('stand.production30') }}">Production 30</a>
                             </nav>
                         </div>
                     </div>
