@@ -33,7 +33,7 @@
                                     <td></td>
                                     <td>Num</td>
                                     @foreach ($counts as $count)
-                                        <td>{{ $count }}</td>
+                                        <td>{{ number_format($count, 2) }}</td>
                                     @endforeach
                                 </tr>
                             @endif
@@ -54,7 +54,7 @@
                         <td></td>
                         <td>Num</td>
                         @foreach ($counts as $count)
-                            <td>{{ $count }}</td>
+                            <td>{{ number_format($count, 2) }}</td>
                         @endforeach
                     </tr>
                 </tbody>

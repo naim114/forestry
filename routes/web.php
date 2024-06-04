@@ -123,3 +123,7 @@ Route::get('/map',
 Route::get('/stand/volume',
     [StandTableController::class, 'volume']
 )->name('stand.volume');
+
+Route::get('/stand/production0',
+    [StandTableController::class, 'production0']
+)->name('stand.production0');
