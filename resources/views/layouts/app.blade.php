@@ -82,10 +82,21 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="{{ route('trees.index') }}">Trees</a>
                                 <a class="nav-link" href="{{ route('trees.perha') }}">Tress Perha</a>
-                                <a class="nav-link" href="{{ route('trees.stand') }}">Stand Table</a>
                                 <a class="nav-link" href="{{ route('trees.felltree') }}">Fell Tree</a>
                                 <a class="nav-link" href="{{ route('trees.year30') }}">Year 30</a>
                                 <a class="nav-link" href="{{ route('trees.map') }}">Tree Distribution</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseLayouts3" aria-expanded="false" aria-controls="collapseLayouts3">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tree"></i></div>
+                            Stand Table
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts3" aria-labelledby="headingOne"
+                            data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="{{ route('stand.volume') }}">Volume</a>
                             </nav>
                         </div>
                     </div>

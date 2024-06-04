@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TreeController;
 use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\SpeciesGroupController;
+use App\Http\Controllers\StandTableController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -107,10 +108,6 @@ Route::get('/trees/perha',
     [TreeController::class, 'perha']
 )->name('trees.perha');
 
-Route::get('/trees/stand',
-    [TreeController::class, 'stand']
-)->name('trees.stand');
-
 Route::get('/trees/felltree',
     [TreeController::class, 'felltree']
 )->name('trees.felltree');
@@ -122,3 +119,7 @@ Route::get('/trees/year30',
 Route::get('/map',
     [TreeController::class, 'map']
 )->name('trees.map');
+
+Route::get('/stand/volume',
+    [StandTableController::class, 'volume']
+)->name('stand.volume');
