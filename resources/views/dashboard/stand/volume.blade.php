@@ -6,7 +6,18 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Stand Table
+            {{-- Stand Table --}}
+            @if ($db == 'trees')
+                Tree 45
+            @elseif($db == 'trees50')
+                Tree 50
+            @elseif($db == 'trees55')
+                Tree 55
+            @elseif($db == 'trees60')
+                Tree 60
+            @elseif($db == 'trees65')
+                Tree 65
+            @endif
         </div>
         <div class="card-body">
             <div class="row g-2 mb-3">

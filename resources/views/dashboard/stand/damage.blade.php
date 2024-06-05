@@ -6,7 +6,18 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Stand Table (Stem Damage)
+            Stand Table (Stem Damage) -
+            @if ($db == 'trees')
+                Tree 45
+            @elseif($db == 'trees50')
+                Tree 50
+            @elseif($db == 'trees55')
+                Tree 55
+            @elseif($db == 'trees60')
+                Tree 60
+            @elseif($db == 'trees65')
+                Tree 65
+            @endif
         </div>
         <div class="card-body">
             <div class="row g-2 mb-3">
@@ -43,30 +54,30 @@
                             <td>Group {{ $group['group'] }}</td>
                             <td>Damage</td>
                             @foreach ($group['damage'] as $damage)
-                                <td>{{ number_format($damage, 2) }}</td>
+                                <td>{{ number_format($damage / 100, 4) }}</td>
                             @endforeach
-                            <td>{{ number_format($group['total_damage'], 2) }}</td>
+                            <td>{{ number_format($group['total_damage'], 4) }}</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Num</td>
                             @foreach ($group['num'] as $num)
-                                <td>{{ number_format($num, 2) }}</td>
+                                <td>{{ number_format($num / 100, 4) }}</td>
                             @endforeach
-                            <td>{{ number_format($group['total_num'], 2) }}</td>
+                            <td>{{ number_format($group['total_num'], 4) }}</td>
                         </tr>
                     @endforeach
                     <tr>
                         <td>TOTAL</td>
                         <td>DMG</td>
                         <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_stem'], 2) }}</td>
+                        <td>{{ number_format($totals['total_stem'], 4) }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>NUM</td>
                         <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_tree_stem'], 2) }}</td>
+                        <td>{{ number_format($totals['total_tree_stem'], 4) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -76,7 +87,18 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Stand Table (Crown Damage)
+            Stand Table (Crown Damage) -
+            @if ($db == 'trees')
+                Tree 45
+            @elseif($db == 'trees50')
+                Tree 50
+            @elseif($db == 'trees55')
+                Tree 55
+            @elseif($db == 'trees60')
+                Tree 60
+            @elseif($db == 'trees65')
+                Tree 65
+            @endif
         </div>
         <div class="card-body">
             <table class="table table-bordered table-hover">
@@ -98,30 +120,30 @@
                             <td>Group {{ $group['group'] }}</td>
                             <td>Damage</td>
                             @foreach ($group['damage'] as $damage)
-                                <td>{{ number_format($damage, 2) }}</td>
+                                <td>{{ number_format($damage / 100, 4) }}</td>
                             @endforeach
-                            <td>{{ number_format($group['total_damage'], 2) }}</td>
+                            <td>{{ number_format($group['total_damage'], 4) }}</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>Num</td>
                             @foreach ($group['num'] as $num)
-                                <td>{{ number_format($num, 2) }}</td>
+                                <td>{{ number_format($num / 100, 4) }}</td>
                             @endforeach
-                            <td>{{ number_format($group['total_num'], 2) }}</td>
+                            <td>{{ number_format($group['total_num'], 4) }}</td>
                         </tr>
                     @endforeach
                     <tr>
                         <td>TOTAL</td>
                         <td>DMG</td>
                         <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_crown'], 2) }}</td>
+                        <td>{{ number_format($totals['total_crown'], 4) }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>NUM</td>
                         <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_tree_crown'], 2) }}</td>
+                        <td>{{ number_format($totals['total_tree_crown'], 4) }}</td>
                     </tr>
                 </tbody>
             </table>
