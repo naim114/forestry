@@ -56,12 +56,13 @@
                     <canvas id="recChart" style="max-width:100%; height:700px"></canvas>
                 </div>
                 <div class="col-xl-3">
-                    <h5>{{ 'CutRegime with highest PROD: ' . $highestProd['cutRegime'] . ' (PROD: ' . $highestProd['PROD'] . ')' }}
-                    </h5>
-                    <h5>{{ 'CutRegime with lowest DMG: ' . $lowestDmg['cutRegime'] . ' (DMG: ' . $lowestDmg['DMG'] . ')' }}
-                    </h5>
-                    <h5>{{ 'CutRegime with highest PROD30: ' . $highestGrowth['cutRegime'] . ' (GROWTH: ' . $highestGrowth['GROWTH'] . ')' }}
-                    </h5>
+                    <h5>Recommendation:</h5>
+                    <p>{{ 'For highest production: cut regime ' . $highestProd['cutRegime'] . ' (PROD: ' . $highestProd['PROD'] . ')' }}
+                    </p>
+                    <p>{{ 'For lowest damage: cut regime ' . $lowestDmg['cutRegime'] . ' (DMG: ' . $lowestDmg['DMG'] . ')' }}
+                    </p>
+                    <p>{{ 'For highest production 30: cut regime ' . $highestGrowth['cutRegime'] . ' (PROD30: ' . $highestGrowth['GROWTH'] . ')' }}
+                    </p>
                 </div>
             </div>
         </div>

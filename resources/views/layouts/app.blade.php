@@ -13,19 +13,19 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <style>
         .bg {
-            background-image: url('assets/img/forestbg.jpg');
+            background-image: url('{{ asset('assets/img/forestbg.jpg') }}');
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
-            background-size: cover;
+            /* background-size: cover; */
         }
     </style>
 </head>
 
 <body class="sb-nav-fixed bg">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-success">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Forestry System</a>
+        <a class="navbar-brand ps-3" href="{{ route('index') }}">Forestry <br> Management System</a>
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                 class="fas fa-bars"></i></button>
