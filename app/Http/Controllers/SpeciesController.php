@@ -6,6 +6,7 @@ use App\Models\Species;
 use App\Models\Tree;
 use App\Models\SpeciesGroup;
 use Illuminate\Http\Request;
+use DB;
 
 class SpeciesController extends Controller
 {
@@ -27,8 +28,54 @@ class SpeciesController extends Controller
             ->groupBy('species')
             ->get();
 
+
+             $cutRegime = [
+            ["trees", 45],
+            ["trees50", 50],
+            ["trees55", 55],
+            ["trees60", 60],
+            ["trees65", 65]
+        ];
+
+        $dataPoints = [];
+
+        foreach ($cutRegime as $regime) {
+            $result = DB::select("SELECT
+                ROUND(SUM(CASE WHEN status = 'CUT' THEN PROD ELSE 0 END), 4) AS PROD,
+                ROUND(SUM(CASE WHEN status = 'CUT' THEN DMG_stem + DMG_crown ELSE 0 END), 4) AS DMG,
+                (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]} WHERE D30 > {$regime[1]} AND species_groups <= 5 AND species_groups != 4) AS GROWTH
+                FROM {$regime[0]}");
+
+            if (!empty($result)) {
+                $row = $result[0];
+                $dataPoints[] = [
+                    "cutRegime" => $regime[1],
+                    "PROD" => $row->PROD,
+                    "DMG" => $row->DMG,
+                    "GROWTH" => $row->GROWTH
+                ];
+            }
+        }
+
+        // Determine the highest and lowest values
+        $highestProd = null;
+        $highestGrowth = null;
+        $lowestDmg = null;
+
+        foreach ($dataPoints as $point) {
+            if ($highestProd === null || $point['PROD'] > $highestProd['PROD']) {
+                $highestProd = $point;
+            }
+            if ($highestGrowth === null || $point['GROWTH'] > $highestGrowth['GROWTH']) {
+                $highestGrowth = $point;
+            }
+            if ($lowestDmg === null || $point['DMG'] < $lowestDmg['DMG']) {
+                $lowestDmg = $point;
+            }
+        }
+
         // Pass data to the view
-        return view('dashboard.index', ['speciesData' => $speciesData, 'treeData' => $treeData]);
+        return view('dashboard.index', compact('speciesData', 'treeData', 'dataPoints', 'highestProd', 'highestGrowth', 'lowestDmg'));
     }
 
     public function index()

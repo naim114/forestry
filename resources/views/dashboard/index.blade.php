@@ -47,6 +47,28 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-chart-area me-1"></i>
+            Recommendation
+        </div>
+        <div class="card-body">
+            {{-- <canvas id="recChart" width="100%" height="40"></canvas> --}}
+            <div class="row">
+                <div class="col-xl-9">
+                    <canvas id="recChart" style="max-width:100%; height:700px"></canvas>
+                </div>
+                <div class="col-xl-3">
+                    <h5>{{ 'CutRegime with highest PROD: ' . $highestProd['cutRegime'] . ' (PROD: ' . $highestProd['PROD'] . ')' }}
+                    </h5>
+                    <h5>{{ 'CutRegime with lowest DMG: ' . $lowestDmg['cutRegime'] . ' (DMG: ' . $lowestDmg['DMG'] . ')' }}
+                    </h5>
+                    <h5>{{ 'CutRegime with highest PROD30: ' . $highestGrowth['cutRegime'] . ' (GROWTH: ' . $highestGrowth['GROWTH'] . ')' }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-chart-area me-1"></i>
             Trees by Species
         </div>
         <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas>
@@ -574,5 +596,6 @@
     <script>
         var chartData = @json($speciesData);
         var treeData = @json($treeData);
+        var dataPoints = @json($dataPoints);
     </script>
 @endpush
