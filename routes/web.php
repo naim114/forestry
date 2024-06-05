@@ -125,23 +125,23 @@ Route::get('/summary',
     [TreeController::class, 'summary']
 )->name('trees.summary');
 
-Route::get('/stand/volume',
+Route::get('/stand/volume/{db?}',
     [StandTableController::class, 'volume']
 )->name('stand.volume');
 
-Route::get('/stand/production0',
+Route::get('/stand/production0/{db?}',
     [StandTableController::class, 'production0']
 )->name('stand.production0');
 
-Route::get('/stand/damage',
+Route::get('/stand/damage/{db?}',
     [StandTableController::class, 'damage']
 )->name('stand.damage');
 
-Route::get('/stand/growth30',
+Route::get('/stand/growth30/{db?}',
     [StandTableController::class, 'growth30']
 )->name('stand.growth30');
 
-Route::get('/stand/production30',
+Route::get('/stand/production30/{db?}',
     [StandTableController::class, 'production30']
 )->name('stand.production30');
 

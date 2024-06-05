@@ -9,6 +9,21 @@
             Stand Table (Production 30)
         </div>
         <div class="card-body">
+            <div class="row g-2 mb-3">
+                <div class="col-auto">
+                    <select class="form-select auto-width" id="tree-select">
+                        <option value="trees" {{ $db == 'trees' ? 'selected' : '' }}>Tree 45</option>
+                        <option value="trees50" {{ $db == 'trees50' ? 'selected' : '' }}>Tree 50</option>
+                        <option value="trees55" {{ $db == 'trees55' ? 'selected' : '' }}>Tree 55</option>
+                        <option value="trees60" {{ $db == 'trees60' ? 'selected' : '' }}>Tree 60</option>
+                        <option value="trees65" {{ $db == 'trees65' ? 'selected' : '' }}>Tree 65</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" onclick="goToRoute()">Go</button>
+                </div>
+            </div>
+
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -58,3 +73,14 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function goToRoute() {
+            var select = document.getElementById('tree-select');
+            var selectedValue = select.options[select.selectedIndex].value;
+            var url = '/stand/production30/' + selectedValue;
+            window.location.href = url;
+        }
+    </script>
+@endpush

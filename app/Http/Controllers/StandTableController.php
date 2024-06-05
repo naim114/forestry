@@ -7,9 +7,9 @@ use DB;
 
 class StandTableController extends Controller
 {
-    public function volume()
+    public function volume($db = 'trees')
     {
-        $trees = DB::table('trees')
+        $trees = DB::table($db)
             ->select(
                 'species_groups',
                 DB::raw("
@@ -29,10 +29,10 @@ class StandTableController extends Controller
             ->orderBy('diameter_class')
             ->get();
 
-        return view('dashboard.stand.volume', compact('trees'));
+        return view('dashboard.stand.volume', compact('db', 'trees'));
     }
 
-    public function production0()
+    public function production0($db = 'trees')
     {
         $sp_group = 7; // Number of species groups
         $d_group = 5;  // Number of diameter ranges
@@ -44,7 +44,7 @@ class StandTableController extends Controller
 
             for ($j = 1; $j <= $d_group; $j++) {
                 // Fetch production data
-                $prod = DB::table('trees')
+                $prod = DB::table($db)
                     ->select(
                         DB::raw('ROUND(SUM(PROD), 4) AS prod'),
                         DB::raw("CASE
@@ -64,7 +64,7 @@ class StandTableController extends Controller
                 $speciesGroup['prod'][] = $prod ? round($prod->prod / 100, 4) : 0;
 
                 // Fetch tree count data
-                $treeCount = DB::table('trees')
+                $treeCount = DB::table($db)
                     ->select(
                         DB::raw('COUNT(*) AS tree_count'),
                         DB::raw("CASE
@@ -95,10 +95,10 @@ class StandTableController extends Controller
             'total_num' => array_sum(array_column($speciesGroups, 'total_num'))
         ];
 
-        return view('dashboard.stand.production0', compact('speciesGroups', 'totals'));
+        return view('dashboard.stand.production0', compact('db', 'speciesGroups', 'totals'));
     }
 
-     public function damage()
+     public function damage($db = 'trees')
     {
         $speciesGroups = 7;
         $diameterGroups = 5;
@@ -121,7 +121,7 @@ class StandTableController extends Controller
 
             for ($j = 1; $j <= $diameterGroups; $j++) {
                 // Fetching stem damage
-                $stemResult = DB::table('trees')
+                $stemResult = DB::table($db)
                     ->selectRaw('ROUND(SUM(`DMG_stem`), 4) AS stem')
                     ->where('DMG_stem', '>', 0)
                     ->where('species_groups', $i)
@@ -132,7 +132,7 @@ class StandTableController extends Controller
                 $stemGroup['damage'][] = $stemResult->stem ?? 0;
                 $totalstem += $stemResult->stem ?? 0;
 
-                $stemCountResult = DB::table('trees')
+                $stemCountResult = DB::table($db)
                     ->selectRaw('ROUND(COUNT(*), 4) AS tree_count')
                     ->where('DMG_stem', '>', 0)
                     ->where('species_groups', $i)
@@ -144,7 +144,7 @@ class StandTableController extends Controller
                 $totaltree_stem += $stemCountResult->tree_count ?? 0;
 
                 // Fetching crown damage
-                $crownResult = DB::table('trees')
+                $crownResult = DB::table($db)
                     ->selectRaw('ROUND(SUM(`DMG_crown`), 4) AS crown')
                     ->where('DMG_crown', '>', 0)
                     ->where('species_groups', $i)
@@ -155,7 +155,7 @@ class StandTableController extends Controller
                 $crownGroup['damage'][] = $crownResult->crown ?? 0;
                 $totalcrown += $crownResult->crown ?? 0;
 
-                $crownCountResult = DB::table('trees')
+                $crownCountResult = DB::table($db)
                     ->selectRaw('ROUND(COUNT(*), 4) AS tree_count')
                     ->where('DMG_crown', '>', 0)
                     ->where('species_groups', $i)
@@ -187,10 +187,10 @@ class StandTableController extends Controller
             'total_tree_crown' => $totaltotaltree_crown / 100,
         ];
 
-        return view('dashboard.stand.damage', compact('stemData', 'crownData', 'totals'));
+        return view('dashboard.stand.damage', compact('db', 'stemData', 'crownData', 'totals'));
     }
 
-    public function growth30()
+    public function growth30($db = 'trees')
     {
         $speciesGroups = 7;
         $diameterGroups = 5;
@@ -206,7 +206,7 @@ class StandTableController extends Controller
             $totalTree = 0;
 
             for ($j = 1; $j <= $diameterGroups; $j++) {
-                $growthResult = DB::table('trees')
+                $growthResult = DB::table($db)
                     ->selectRaw('ROUND(SUM(`V30`), 4) AS growth, diameter_range')
                     ->fromSub(function ($query) use ($i) {
                         $query->selectRaw('`V30`, CASE
@@ -225,7 +225,7 @@ class StandTableController extends Controller
                 $growthGroup['growth'][] = $growthResult->growth ?? 0;
                 $totalGrowth += $growthResult->growth ?? 0;
 
-                $countResult = DB::table('trees')
+                $countResult = DB::table($db)
                     ->selectRaw('ROUND(COUNT(*), 4) AS tree_count, diameter_range')
                     ->fromSub(function ($query) use ($i) {
                         $query->selectRaw('`V30`, CASE
@@ -257,10 +257,10 @@ class StandTableController extends Controller
             'total_tree' => $totalTotalTree / 100,
         ];
 
-        return view('dashboard.stand.growth30', compact('growthData', 'totals'));
+        return view('dashboard.stand.growth30', compact('db', 'growthData', 'totals'));
     }
 
-    public function production30()
+    public function production30($db = 'trees')
     {
         $speciesGroups = 7;
         $diameterGroups = 5;
@@ -276,7 +276,7 @@ class StandTableController extends Controller
             $totalTree = 0;
 
             for ($j = 1; $j <= $diameterGroups; $j++) {
-                $prodResult = DB::table('trees')
+                $prodResult = DB::table($db)
                     ->selectRaw('ROUND(SUM(`V30`), 4) AS prod, diameter_range')
                     ->fromSub(function ($query) use ($i) {
                         $query->selectRaw('`V30`, `D30`, `status`, `species_groups`, CASE
@@ -298,7 +298,7 @@ class StandTableController extends Controller
                 $productionGroup['prod'][] = $prodResult->prod ?? 0;
                 $totalProd += $prodResult->prod ?? 0;
 
-                $countResult = DB::table('trees')
+                $countResult = DB::table($db)
                     ->selectRaw('COUNT(*) AS tree_count, diameter_range')
                     ->fromSub(function ($query) use ($i) {
                         $query->selectRaw('`V30`, `D30`, `status`, `species_groups`, CASE
@@ -333,6 +333,6 @@ class StandTableController extends Controller
             'total_tree' => $totalTotalTree / 100,
         ];
 
-        return view('dashboard.stand.production30', compact('productionData', 'totals'));
+        return view('dashboard.stand.production30', compact('db', 'productionData', 'totals'));
     }
 }
