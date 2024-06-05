@@ -148,3 +148,27 @@ Route::get('/stand/production30',
 Route::get('/process',
     [ProcessController::class, 'index']
 )->name('process');
+
+Route::get('/process/calc_volume',
+    [ProcessController::class, 'calc_volume']
+)->name('process.calc_volume');
+
+Route::get('/process/calc_cut_angle',
+    [ProcessController::class, 'calc_cut_angle']
+)->name('process.calc_cut_angle');
+
+Route::get('/process/create_production0',
+    [ProcessController::class, 'create_production0']
+)->name('process.create_production0');
+
+Route::get('/process/calc_dmg_stem',
+    [ProcessController::class, 'calc_dmg_stem']
+)->name('process.calc_dmg_stem');
+
+Route::get('/process/calc_dmg_crown',
+    [ProcessController::class, 'calc_dmg_crown']
+)->name('process.calc_dmg_crown');
+
+Route::get('/process/calc_v30_d30',
+    [ProcessController::class, 'calc_v30_d30']
+)->name('process.calc_v30_d30');
