@@ -20,6 +20,7 @@
             /* background-size: cover; */
         }
     </style>
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js" charset="utf-8"></script>
 </head>
 
 <body class="sb-nav-fixed bg">

@@ -25,22 +25,22 @@
                     @foreach ($data as $row)
                         <tr>
                             <td>{{ $row['species_group'] }}</td>
-                            <td>{{ $row['volume'] }}</td>
-                            <td>{{ $row['number'] }}</td>
-                            <td>{{ $row['production'] }}</td>
-                            <td>{{ $row['damage'] }}</td>
-                            <td>{{ $row['growth30'] }}</td>
-                            <td>{{ $row['production30'] }}</td>
+                            <td>{{ $row['volume'] / 100 }}</td>
+                            <td>{{ $row['number'] / 100 }}</td>
+                            <td>{{ $row['production'] / 100 }}</td>
+                            <td>{{ $row['damage'] / 100 }}</td>
+                            <td>{{ $row['growth30'] / 100 }}</td>
+                            <td>{{ $row['production30'] / 100 }}</td>
                         </tr>
                     @endforeach
                     <tr>
                         <th>TOTAL</th>
-                        <th>{{ $totalVolume }}</th>
-                        <th>{{ $totalCount }}</th>
-                        <th>{{ $totalProduction }}</th>
-                        <th>{{ $totalDamage }}</th>
-                        <th>{{ $totalV30 }}</th>
-                        <th>{{ $totalP30 }}</th>
+                        <th>{{ $totalVolume / 100 }}</th>
+                        <th>{{ $totalCount / 100 }}</th>
+                        <th>{{ $totalProduction / 100 }}</th>
+                        <th>{{ $totalDamage / 100 }}</th>
+                        <th>{{ $totalV30 / 100 }}</th>
+                        <th>{{ $totalP30 / 100 }}</th>
                     </tr>
                 </tbody>
             </table>
