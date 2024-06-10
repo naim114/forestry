@@ -17,7 +17,11 @@ use App\Http\Controllers\ProcessController;
 |
 */
 
-Route::get('/',
+Route::get('/', function () {
+    return view('home.index');
+})->name('home');
+
+Route::get('/dashboard',
     [SpeciesController::class, 'dashboard']
 )->name('index');
 
