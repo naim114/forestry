@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Production 30 Stand Table')
+@section('page-title', 'Production Stand Table')
 
 @section('content')
     <div class="card mb-4">
@@ -45,41 +45,51 @@
                         <th>30 - 45</th>
                         <th>45 - 60</th>
                         <th>60+</th>
-                        <th>Total</th>
+                        <th>total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($productionData as $group)
+                    @foreach ($data as $group => $groupData)
                         <tr>
-                            <td>Group {{ $group['group'] }}</td>
-                            <td>Prod</td>
-                            @foreach ($group['prod'] as $prod)
-                                <td>{{ number_format($prod / 100, 4) }}</td>
-                            @endforeach
-                            <td>{{ number_format($group['total_prod'], 4) }}</td>
+                            <th>Group {{ $group }}</th>
+                            <th>prod</th>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <th>{{ $groupData['prod'][$i] ?? '0' }}</th>
+                            @endfor
+                            <th>{{ $groupData['totalprod'] }}</th>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td>Num</td>
-                            @foreach ($group['num'] as $num)
-                                <td>{{ number_format($num / 100, 4) }}</td>
-                            @endforeach
-                            <td>{{ number_format($group['total_num'], 4) }}</td>
+                            <th></th>
+                            <th>Num</th>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <th>{{ $groupData['tree_count'][$i] ?? '0' }}</th>
+                            @endfor
+                            <th>{{ $groupData['totaltree'] }}</th>
                         </tr>
                     @endforeach
-                    <tr>
-                        <td>TOTAL</td>
-                        <td>PROD</td>
-                        <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_prod'], 4) }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>NUM</td>
-                        <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_tree'], 4) }}</td>
-                    </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>TOTAL</th>
+                        <th>PROD</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ $totaltotalprod }}</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>NUM</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ $totaltotaltree }}</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
