@@ -61,7 +61,9 @@
                     </p>
                     <p>{{ 'For lowest damage: cut regime ' . $lowestDmg['cutRegime'] . ' (DMG: ' . $lowestDmg['DMG'] . ')' }}
                     </p>
-                    <p>{{ 'For highest production 30: cut regime ' . $highestGrowth['cutRegime'] . ' (PROD30: ' . $highestGrowth['GROWTH'] . ')' }}
+                    <p>{{ 'For highest proud 30: cut regime ' . $highestProd30['cutRegime'] . ' (PROD30: ' . $highestGrowth['PROD30'] . ')' }}
+                    </p>
+                    <p>{{ 'For highest growth: cut regime ' . $highestGrowth['cutRegime'] . ' (GROWTH: ' . $highestGrowth['GROWTH'] . ')' }}
                     </p>
                 </div>
             </div>

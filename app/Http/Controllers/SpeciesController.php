@@ -43,7 +43,8 @@ class SpeciesController extends Controller
             $result = DB::select("SELECT
                 ROUND(SUM(CASE WHEN status = 'CUT' THEN PROD ELSE 0 END), 4) AS PROD,
                 ROUND(SUM(CASE WHEN status = 'CUT' THEN DMG_stem + DMG_crown ELSE 0 END), 4) AS DMG,
-                (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]} WHERE D30 > {$regime[1]} AND species_groups <= 5 AND species_groups != 4) AS GROWTH
+                (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]} WHERE D30 > {$regime[1]} AND species_groups <= 5 AND species_groups != 4) AS PROD30,
+                (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]}) AS GROWTH
                 FROM {$regime[0]}");
 
             if (!empty($result)) {
@@ -52,6 +53,7 @@ class SpeciesController extends Controller
                     "cutRegime" => $regime[1],
                     "PROD" => $row->PROD,
                     "DMG" => $row->DMG,
+                    "PROD30" => $row->PROD30,
                     "GROWTH" => $row->GROWTH
                 ];
             }
@@ -61,6 +63,7 @@ class SpeciesController extends Controller
         $highestProd = null;
         $highestGrowth = null;
         $lowestDmg = null;
+        $highestProd30 = null;
 
         foreach ($dataPoints as $point) {
             if ($highestProd === null || $point['PROD'] > $highestProd['PROD']) {
@@ -69,13 +72,16 @@ class SpeciesController extends Controller
             if ($highestGrowth === null || $point['GROWTH'] > $highestGrowth['GROWTH']) {
                 $highestGrowth = $point;
             }
+            if ($highestProd30 === null || $point['PROD30'] > $highestProd30['PROD30']) {
+                $highestProd30 = $point;
+            }
             if ($lowestDmg === null || $point['DMG'] < $lowestDmg['DMG']) {
                 $lowestDmg = $point;
             }
         }
 
         // Pass data to the view
-        return view('dashboard.index', compact('speciesData', 'treeData', 'dataPoints', 'highestProd', 'highestGrowth', 'lowestDmg'));
+        return view('dashboard.index', compact('speciesData', 'treeData', 'dataPoints', 'highestProd', 'highestGrowth', 'lowestDmg', 'highestProd30'));
     }
 
     public function index()

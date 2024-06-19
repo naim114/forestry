@@ -122,15 +122,20 @@ class TreeController extends Controller
 
     public function map()
     {
-
         // Fetch trees with diameter greater than 30
         $trees = Tree::where('diameter_dbh_cm', '>', 30)->get();
 
-        // Process the data points
+        // Process the data points and triangles
         $dataPoints = [];
+        $triangles = [];
+        $hitrange = 1;
+
         foreach ($trees as $tree) {
             $x = $tree->x;
             $y = $tree->y;
+            $status = $tree->status;
+            $angle = $tree->cut_angle;
+            $stemHeight = $tree->stem_height_m;
 
             if ($tree->BlockX > 1) {
                 $x = ($tree->BlockX - 1) * 100 + $tree->x;
@@ -139,15 +144,54 @@ class TreeController extends Controller
                 $y = ($tree->BlockY - 1) * 100 + $tree->y;
             }
 
+            if ($status == 'CUT') {
+                if ($angle > 0 && $angle < 90) {
+                    $xend1 = $x + (($stemHeight + 5 + 5) * sin(deg2rad($angle + $hitrange)));
+                    $yend1 = $y + (($stemHeight + 5 + 5) * cos(deg2rad($angle + $hitrange)));
+                    $xend2 = $x + (($stemHeight + 5 + 5) * sin(deg2rad($angle - $hitrange)));
+                    $yend2 = $y + (($stemHeight + 5 + 5) * cos(deg2rad($angle - $hitrange)));
+                    $triangles[] = ["x" => [$x, $xend1, $xend2], "y" => [$y, $yend1, $yend2]];
+                } elseif ($angle > 90 && $angle < 180) {
+                    $xend1 = $x + (($stemHeight + 5 + 5) * sin(deg2rad(180 - $angle + $hitrange)));
+                    $yend1 = $y - (($stemHeight + 5 + 5) * cos(deg2rad(180 - $angle + $hitrange)));
+                    $xend2 = $x + (($stemHeight + 5 + 5) * sin(deg2rad(180 - $angle - $hitrange)));
+                    $yend2 = $y - (($stemHeight + 5 + 5) * cos(deg2rad(180 - $angle - $hitrange)));
+                    $triangles[] = ["x" => [$x, $xend1, $xend2], "y" => [$y, $yend1, $yend2]];
+                } elseif ($angle > 180 && $angle < 270) {
+                    $xend1 = $x - (($stemHeight + 5 + 5) * sin(deg2rad(180 + $angle + $hitrange)));
+                    $yend1 = $y - (($stemHeight + 5 + 5) * cos(deg2rad(180 + $angle + $hitrange)));
+                    $xend2 = $x - (($stemHeight + 5 + 5) * sin(deg2rad(180 + $angle - $hitrange)));
+                    $yend2 = $y - (($stemHeight + 5 + 5) * cos(deg2rad(180 + $angle - $hitrange)));
+                    $triangles[] = ["x" => [$x, $xend1, $xend2], "y" => [$y, $yend1, $yend2]];
+                } elseif ($angle > 270 && $angle < 360) {
+                    $xend1 = $x - (($stemHeight + 5 + 5) * sin(deg2rad(360 - $angle + $hitrange)));
+                    $yend1 = $y + (($stemHeight + 5 + 5) * cos(deg2rad(360 - $angle + $hitrange)));
+                    $xend2 = $x - (($stemHeight + 5 + 5) * sin(deg2rad(360 - $angle - $hitrange)));
+                    $yend2 = $y + (($stemHeight + 5 + 5) * cos(deg2rad(360 - $angle - $hitrange)));
+                    $triangles[] = ["x" => [$x, $xend1, $xend2], "y" => [$y, $yend1, $yend2]];
+                }
+            }
+
+            if ($status == 'VICTIM') {
+                if ($tree->DMG_stem > 0) {
+                    $status = 'VICTIM STEM';
+                } else {
+                    $status = 'VICTIM CROWN';
+                }
+            }
+
             $dataPoints[] = [
                 'x' => $x,
                 'y' => $y,
                 'id' => $tree->TreeNum,
-                'status' => $tree->status
+                'status' => $status
             ];
         }
 
-        return view('dashboard.trees.map', ['dataPoints' => json_encode($dataPoints, JSON_NUMERIC_CHECK)]);
+        return view('dashboard.trees.map', [
+            'dataPoints' => json_encode($dataPoints, JSON_NUMERIC_CHECK),
+            'triangles' => json_encode($triangles)
+        ]);
     }
 
     public function summary()
