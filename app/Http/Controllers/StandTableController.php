@@ -280,6 +280,24 @@ class StandTableController extends Controller
         $totaltotalprod = 0;
         $totaltotaltree = 0;
 
+        $cutting = 45;
+
+        if ($db == 'trees') {
+            $cutting = 45;
+        }
+        elseif($db == 'trees50') {
+            $cutting = 50;
+        }
+        elseif($db == 'trees55') {
+            $cutting = 55;
+        }
+        elseif($db == 'trees60') {
+            $cutting = 60;
+        }
+        elseif($db == 'trees65') {
+            $cutting = 65;
+        }
+
         for ($i = 1; $i <= $species_groups; $i++){
             $groupData = [
                 'prod' => [],
@@ -301,7 +319,7 @@ class StandTableController extends Controller
                                 END AS diameter_range")
                     )
                     ->where('species_groups', $i)
-                    ->where('D30', '>', 65)
+                    ->where('D30', '>',  $cutting)
                     ->where('species_groups', '<=', 5)
                     ->where('species_groups', '!=', 4)
                     ->having('diameter_range', $j)
@@ -324,7 +342,7 @@ class StandTableController extends Controller
                                 END AS diameter_range")
                     )
                     ->where('species_groups', $i)
-                    ->where('D30', '>', 65)
+                    ->where('D30', '>', $cutting)
                     ->where('species_groups', '<=', 5)
                     ->where('species_groups', '!=', 4)
                     ->having('diameter_range', $j)
