@@ -201,13 +201,13 @@ class StandTableController extends Controller
 
     public function growth30($db = 'trees')
     {
-        $species_groups = 7;
-        $d_group = 5;
+        $species_groups = 7; // Number of species groups
+        $d_group = 5; // Number of diameter groups
         $data = [];
         $totaltotalgrowth = 0;
         $totaltotaltree = 0;
 
-        for ($i = 1; $i <= $species_groups; $i++){
+        for ($i = 1; $i <= $species_groups; $i++) {
             $groupData = [
                 'growth' => [],
                 'tree_count' => [],
@@ -215,19 +215,19 @@ class StandTableController extends Controller
                 'totaltree' => 0
             ];
 
-            for ($j = 1; $j <= $d_group; $j++){
+            for ($j = 1; $j <= $d_group; $j++) {
+                // Query to calculate growth
                 $growthResult = DB::table($db)
-                    ->select(
-                        DB::raw('ROUND(SUM(`V30`), 4) AS growth'),
-                        DB::raw("CASE
+                    ->selectRaw('ROUND(SUM(`V30`), 4) AS growth')
+                    ->selectRaw('CASE
                                     WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
                                     WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
                                     WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
                                     WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
                                     ELSE 5
-                                END AS diameter_range")
-                    )
+                                END AS diameter_range')
                     ->where('species_groups', $i)
+                    ->where('status', 'KEEP')
                     ->having('diameter_range', $j)
                     ->groupBy('diameter_range')
                     ->first();
@@ -236,18 +236,18 @@ class StandTableController extends Controller
                 $groupData['growth'][$j] = round($growth / 100, 4);
                 $groupData['totalgrowth'] += $growth;
 
+                // Query to calculate tree count
                 $treeCountResult = DB::table($db)
-                    ->select(
-                        DB::raw('ROUND(COUNT(*), 4) AS tree_count'),
-                        DB::raw("CASE
+                    ->selectRaw('ROUND(COUNT(*), 4) AS tree_count')
+                    ->selectRaw('CASE
                                     WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
                                     WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
                                     WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
                                     WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
                                     ELSE 5
-                                END AS diameter_range")
-                    )
+                                END AS diameter_range')
                     ->where('species_groups', $i)
+                    ->where('status', 'KEEP')
                     ->having('diameter_range', $j)
                     ->groupBy('diameter_range')
                     ->first();
@@ -257,13 +257,17 @@ class StandTableController extends Controller
                 $groupData['totaltree'] += $tree_count;
             }
 
+            // Store group data in the main array
             $groupData['totalgrowth'] = round($groupData['totalgrowth'] / 100, 4);
             $groupData['totaltree'] = round($groupData['totaltree'] / 100, 4);
             $data[$i] = $groupData;
+
+            // Calculate totals
             $totaltotalgrowth += $groupData['totalgrowth'];
             $totaltotaltree += $groupData['totaltree'];
         }
 
+        // Pass data to the view
         return view('dashboard.stand.growth30', [
             'db' => $db,
             'data' => $data,

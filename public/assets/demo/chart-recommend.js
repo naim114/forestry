@@ -1,21 +1,9 @@
-
-
 // Extracting data for the chart
-var xValues = dataPoints.map(function (point) {
-    return point.cutRegime;
-});
-var prodValues = dataPoints.map(function (point) {
-    return point.PROD;
-});
-var dmgValues = dataPoints.map(function (point) {
-    return point.DMG;
-});
-var growthValues = dataPoints.map(function (point) {
-    return point.GROWTH;
-});
-var prod30Values = dataPoints.map(function (point) {
-    return point.PROD30;
-});
+var xValues = dataPoints.map(function (point) { return point.cutRegime; });
+var prodValues = dataPoints.map(function (point) { return point.PROD; });
+var dmgValues = dataPoints.map(function (point) { return point.DMG; });
+var growthValues = dataPoints.map(function (point) { return point.GROWTH; });
+var prod30Values = dataPoints.map(function (point) { return point.PROD30; });
 
 // Creating the chart
 new Chart("recChart", {
@@ -40,8 +28,7 @@ new Chart("recChart", {
             label: 'GROWTH',
             backgroundColor: 'green',
             data: growthValues
-        }
-        ]
+        }]
     },
     options: {
         legend: {

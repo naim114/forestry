@@ -63,6 +63,7 @@ class SpeciesController extends Controller
         ]);
     }
 
+
     public function index()
     {
         $species = Species::all();
