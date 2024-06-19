@@ -1,3 +1,5 @@
+
+
 // Extracting data for the chart
 var xValues = dataPoints.map(function (point) {
     return point.cutRegime;
@@ -8,11 +10,11 @@ var prodValues = dataPoints.map(function (point) {
 var dmgValues = dataPoints.map(function (point) {
     return point.DMG;
 });
-var prod30Values = dataPoints.map(function (point) {
-    return point.PROD30;
-});
 var growthValues = dataPoints.map(function (point) {
     return point.GROWTH;
+});
+var prod30Values = dataPoints.map(function (point) {
+    return point.PROD30;
 });
 
 // Creating the chart
@@ -32,10 +34,9 @@ new Chart("recChart", {
         },
         {
             label: 'PROD30',
-            backgroundColor: 'yellow',
+            backgroundColor: 'violet',
             data: prod30Values
-        },
-        {
+        }, {
             label: 'GROWTH',
             backgroundColor: 'green',
             data: growthValues

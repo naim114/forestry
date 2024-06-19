@@ -12,24 +12,8 @@ class SpeciesController extends Controller
 {
     public function dashboard()
     {
-        // Fetch data and group by species group
-        $speciesData = Species::with('speciesGroup')
-            ->get()
-            ->groupBy('species_groups')
-            ->map(function ($group) {
-                return [
-                    'groupName' => $group->first()->speciesGroup->name,
-                    'count' => $group->count(),
-                ];
-            });
-
-        // Fetch data and group by species
-        $treeData = Tree::select('species', \DB::raw('count(*) as total'))
-            ->groupBy('species')
-            ->get();
-
-
-             $cutRegime = [
+        // Database logic
+        $cutRegime = [
             ["trees", 45],
             ["trees50", 50],
             ["trees55", 55],
@@ -40,48 +24,43 @@ class SpeciesController extends Controller
         $dataPoints = [];
 
         foreach ($cutRegime as $regime) {
-            $result = DB::select("SELECT
-                ROUND(SUM(CASE WHEN status = 'CUT' THEN PROD ELSE 0 END), 4) AS PROD,
-                ROUND(SUM(CASE WHEN status = 'CUT' THEN DMG_stem + DMG_crown ELSE 0 END), 4) AS DMG,
-                (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]} WHERE D30 > {$regime[1]} AND species_groups <= 5 AND species_groups != 4) AS PROD30,
-                (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]}) AS GROWTH
-                FROM {$regime[0]}");
+            $result = DB::selectOne("
+                SELECT
+                    ROUND(SUM(CASE WHEN status = 'CUT' THEN PROD ELSE 0 END), 4) AS PROD,
+                    ROUND(SUM(CASE WHEN status = 'CUT' THEN DMG_stem + DMG_crown ELSE 0 END), 4) AS DMG,
+                    (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]} WHERE D30 > {$regime[1]} AND species_groups <= 5 AND species_groups != 4) AS PROD30,
+                    (SELECT ROUND(SUM(V30), 4) FROM {$regime[0]}) AS GROWTH
+                FROM {$regime[0]}
+            ");
 
-            if (!empty($result)) {
-                $row = $result[0];
+            if ($result) {
                 $dataPoints[] = [
                     "cutRegime" => $regime[1],
-                    "PROD" => $row->PROD,
-                    "DMG" => $row->DMG,
-                    "PROD30" => $row->PROD30,
-                    "GROWTH" => $row->GROWTH
+                    "PROD" => $result->PROD,
+                    "DMG" => $result->DMG,
+                    "PROD30" => $result->PROD30,
+                    "GROWTH" => $result->GROWTH
                 ];
             }
         }
 
-        // Determine the highest and lowest values
-        $highestProd = null;
-        $highestGrowth = null;
-        $lowestDmg = null;
-        $highestProd30 = null;
+        $closestProdProd30 = null;
+        $closestDifference = null;
 
         foreach ($dataPoints as $point) {
-            if ($highestProd === null || $point['PROD'] > $highestProd['PROD']) {
-                $highestProd = $point;
-            }
-            if ($highestGrowth === null || $point['GROWTH'] > $highestGrowth['GROWTH']) {
-                $highestGrowth = $point;
-            }
-            if ($highestProd30 === null || $point['PROD30'] > $highestProd30['PROD30']) {
-                $highestProd30 = $point;
-            }
-            if ($lowestDmg === null || $point['DMG'] < $lowestDmg['DMG']) {
-                $lowestDmg = $point;
+            $difference = abs($point['PROD'] - $point['PROD30']);
+
+            if ($closestProdProd30 === null || $difference < $closestDifference) {
+                $closestProdProd30 = $point;
+                $closestDifference = $difference;
             }
         }
 
         // Pass data to the view
-        return view('dashboard.index', compact('speciesData', 'treeData', 'dataPoints', 'highestProd', 'highestGrowth', 'lowestDmg', 'highestProd30'));
+        return view('dashboard.index', [
+            'dataPoints' => $dataPoints,
+            'closestProdProd30' => $closestProdProd30
+        ]);
     }
 
     public function index()
