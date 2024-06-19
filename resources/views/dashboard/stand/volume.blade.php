@@ -45,45 +45,70 @@
                         <th>30 - 45</th>
                         <th>45 - 60</th>
                         <th>60+</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
-                        $currentGroup = '';
-                        $counts = [];
+                        $totaltotalvolume = 0;
+                        $totaltotaltree = 0;
                     @endphp
-                    @foreach ($trees as $tree)
-                        @if ($currentGroup != $tree->species_groups)
-                            @if ($currentGroup != '')
-                                <tr>
-                                    <td></td>
-                                    <td>Num</td>
-                                    @foreach ($counts as $count)
-                                        <td>{{ number_format($count, 2) }}</td>
-                                    @endforeach
-                                </tr>
-                            @endif
-                            @php
-                                $currentGroup = $tree->species_groups;
-                                $counts = [];
-                            @endphp
-                            <tr>
-                                <td>{{ $tree->species_groups }}</td>
-                                <td>Volume</td>
-                        @endif
-                        <td>{{ $tree->avg_volume_perha }}</td>
+
+                    @foreach ($data as $speciesGroup => $diameterData)
                         @php
-                            $counts[] = $tree->tree_count_perha;
+                            $totalvolume = 0;
+                            $totaltree = 0;
+                        @endphp
+                        <tr>
+                            <th>{{ $speciesGroup }}</th>
+                            <th>Volume</th>
+                            @foreach (['5-15', '15-30', '30-45', '45-60', '60+'] as $range)
+                                <th>{{ $diameterData[$range]['avg_volume_perha'] ?? '0' }}</th>
+                                @php
+                                    $totalvolume += $diameterData[$range]['avg_volume_perha'] ?? 0;
+                                @endphp
+                            @endforeach
+                            <th>{{ round($totalvolume, 4) }}</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>Num</th>
+                            @foreach (['5-15', '15-30', '30-45', '45-60', '60+'] as $range)
+                                <th>{{ $diameterData[$range]['tree_count_perha'] ?? '0' }}</th>
+                                @php
+                                    $totaltree += $diameterData[$range]['tree_count_perha'] ?? 0;
+                                @endphp
+                            @endforeach
+                            <th>{{ round($totaltree, 4) }}</th>
+                        </tr>
+                        @php
+                            $totaltotalvolume += $totalvolume;
+                            $totaltotaltree += $totaltree;
                         @endphp
                     @endforeach
-                    <tr>
-                        <td></td>
-                        <td>Num</td>
-                        @foreach ($counts as $count)
-                            <td>{{ number_format($count, 2) }}</td>
-                        @endforeach
-                    </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>TOTAL</th>
+                        <th>Volume</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ round($totaltotalvolume, 4) }}</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>NUM</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ round($totaltotaltree, 4) }}</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

@@ -7,29 +7,63 @@ use DB;
 
 class StandTableController extends Controller
 {
+    // public function volume($db = 'trees')
+    // {
+    //     $trees = DB::table($db)
+    //         ->select(
+    //             'species_groups',
+    //             DB::raw("
+    //                 CASE
+    //                     WHEN diameter_dbh_cm BETWEEN 5 AND 14.999 THEN '5-15'
+    //                     WHEN diameter_dbh_cm BETWEEN 15 AND 29.999 THEN '15-30'
+    //                     WHEN diameter_dbh_cm BETWEEN 30 AND 44.999 THEN '30-45'
+    //                     WHEN diameter_dbh_cm BETWEEN 45 AND 59.999 THEN '45-60'
+    //                     ELSE '60+'
+    //                 END AS diameter_range"
+    //             ),
+    //             DB::raw('ROUND(SUM(volume_m3)/100, 4) AS avg_volume_perha'),
+    //             DB::raw('ROUND(COUNT(*)/100, 4) AS tree_count_perha')
+    //         )
+    //         ->groupBy('species_groups', 'diameter_range')
+    //         ->orderBy('species_groups', 'ASC')
+    //         ->orderBy('diameter_class')
+    //         ->get();
+
+    //     return view('dashboard.stand.volume', compact('db', 'trees'));
+    // }
+
     public function volume($db = 'trees')
     {
-        $trees = DB::table($db)
+        $results = DB::table($db)
             ->select(
                 'species_groups',
-                DB::raw("
-                    CASE
-                        WHEN diameter_dbh_cm BETWEEN 5 AND 14.999 THEN '5-15'
-                        WHEN diameter_dbh_cm BETWEEN 15 AND 29.999 THEN '15-30'
-                        WHEN diameter_dbh_cm BETWEEN 30 AND 44.999 THEN '30-45'
-                        WHEN diameter_dbh_cm BETWEEN 45 AND 59.999 THEN '45-60'
-                        ELSE '60+'
-                    END AS diameter_range"
-                ),
+                DB::raw('CASE
+                    WHEN diameter_dbh_cm BETWEEN 5 AND 14.999 THEN "5-15"
+                    WHEN diameter_dbh_cm BETWEEN 15 AND 29.999 THEN "15-30"
+                    WHEN diameter_dbh_cm BETWEEN 30 AND 44.999 THEN "30-45"
+                    WHEN diameter_dbh_cm BETWEEN 45 AND 59.999 THEN "45-60"
+                    ELSE "60+"
+                END AS diameter_range'),
                 DB::raw('ROUND(SUM(volume_m3)/100, 4) AS avg_volume_perha'),
                 DB::raw('ROUND(COUNT(*)/100, 4) AS tree_count_perha')
             )
             ->groupBy('species_groups', 'diameter_range')
-            ->orderBy('species_groups', 'ASC')
-            ->orderBy('diameter_class')
+            ->orderBy('species_groups', 'asc')
+            ->orderBy('diameter_range')
             ->get();
 
-        return view('dashboard.stand.volume', compact('db', 'trees'));
+        $data = [];
+        foreach ($results as $row) {
+            $data[$row->species_groups][$row->diameter_range] = [
+                'avg_volume_perha' => $row->avg_volume_perha,
+                'tree_count_perha' => $row->tree_count_perha,
+            ];
+        }
+
+        return view('dashboard.stand.volume', [
+            'db' => $db,
+            'data' => $data
+        ]);
     }
 
     public function production0($db = 'trees')
