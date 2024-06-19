@@ -40,5 +40,7 @@
     <script>
         // Pass PHP array to JavaScript
         var dataPoints = @json($dataPoints);
+        var chartData = @json($speciesData);
+        var treeData = @json($treeData);
     </script>
 @endpush

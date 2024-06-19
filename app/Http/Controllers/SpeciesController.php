@@ -12,6 +12,30 @@ class SpeciesController extends Controller
 {
     public function dashboard()
     {
+         // Fetch data and group by species group
+        $speciesData = Species::with('speciesGroup')
+            ->get()
+            ->groupBy('species_groups')
+            ->map(function ($group) {
+                return [
+                    'groupName' => $group->first()->speciesGroup->name,
+                    'count' => $group->count(),
+                ];
+            });
+        // Fetch data and group by species
+        $treeData = Tree::select('species', \DB::raw('count(*) as total'))
+            ->groupBy('species')
+            ->get();
+
+
+             $cutRegime = [
+            ["trees", 45],
+            ["trees50", 50],
+            ["trees55", 55],
+            ["trees60", 60],
+            ["trees65", 65]
+        ];
+
         // Database logic
         $cutRegime = [
             ["trees", 45],
@@ -59,7 +83,9 @@ class SpeciesController extends Controller
         // Pass data to the view
         return view('dashboard.index', [
             'dataPoints' => $dataPoints,
-            'closestProdProd30' => $closestProdProd30
+            'closestProdProd30' => $closestProdProd30,
+            'speciesData' => $speciesData,
+            'treeData' => $treeData
         ]);
     }
 
