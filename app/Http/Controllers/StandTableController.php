@@ -276,100 +276,118 @@ class StandTableController extends Controller
         ]);
     }
 
-    public function production30($db = 'trees')
-    {
+    // public function production30($db = 'trees')
+    // {
+    //     // Determine cutting value based on $db parameter
+    //     switch ($db) {
+    //         case 'trees50':
+    //             $cutting = 50;
+    //             break;
+    //         case 'trees55':
+    //             $cutting = 55;
+    //             break;
+    //         case 'trees60':
+    //             $cutting = 60;
+    //             break;
+    //         case 'trees65':
+    //             $cutting = 65;
+    //             break;
+    //         default:
+    //             $cutting = 45; // Default to 45 if $db is 'trees' or unrecognized
+    //             break;
+    //     }
+
+    //     return view('dashboard.stand.production30', [
+    //         'db' => $db,
+    //     ]);
+    // }
+
+    public function production30($db = 'trees') {
+        // Determine cutting value based on $db parameter
+        switch ($db) {
+            case 'trees50':
+                $cutting = 50;
+                break;
+            case 'trees55':
+                $cutting = 55;
+                break;
+            case 'trees60':
+                $cutting = 60;
+                break;
+            case 'trees65':
+                $cutting = 65;
+                break;
+            default:
+                $cutting = 45; // Default to 45 if $db is 'trees' or unrecognized
+                break;
+        }
+
+        // Fetch data from database
         $species_groups = 7;
         $d_group = 5;
         $data = [];
         $totaltotalprod = 0;
         $totaltotaltree = 0;
 
-        $cutting = 45;
-
-        if ($db == 'trees') {
-            $cutting = 45;
-        }
-        elseif($db == 'trees50') {
-            $cutting = 50;
-        }
-        elseif($db == 'trees55') {
-            $cutting = 55;
-        }
-        elseif($db == 'trees60') {
-            $cutting = 60;
-        }
-        elseif($db == 'trees65') {
-            $cutting = 65;
-        }
-
-        for ($i = 1; $i <= $species_groups; $i++){
+        for ($i = 1; $i <= $species_groups; $i++) {
             $groupData = [
+                'group' => $i,
                 'prod' => [],
-                'tree_count' => [],
-                'totalprod' => 0,
-                'totaltree' => 0
+                'num' => []
             ];
 
-            for ($j = 1; $j <= $d_group; $j++){
-                $prodResult = DB::table($db)
-                    ->select(
-                        DB::raw('ROUND(SUM(`V30`), 4) AS prod'),
-                        DB::raw("CASE
-                                    WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
-                                    WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
-                                    WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
-                                    WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
-                                    ELSE 5
-                                END AS diameter_range")
-                    )
-                    ->where('species_groups', $i)
-                    ->where('D30', '>',  $cutting)
-                    ->where('species_groups', '<=', 5)
-                    ->where('species_groups', '!=', 4)
-                    ->having('diameter_range', $j)
-                    ->groupBy('diameter_range')
-                    ->first();
+            for ($j = 1; $j <= $d_group; $j++) {
+                $prodQuery = "SELECT ROUND(SUM(`V30`), 4) AS prod
+                             FROM $db
+                             WHERE `species_groups` = $i
+                               AND `D30` > $cutting
+                               AND `species_groups` <= 5
+                               AND `species_groups` != 4
+                               AND `status` = 'KEEP'
+                               AND CASE
+                                   WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                                   WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                                   WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                                   WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                                   ELSE 5
+                               END = $j";
 
-                $prod = $prodResult ? $prodResult->prod : 0;
-                $groupData['prod'][$j] = round($prod / 100, 4);
-                $groupData['totalprod'] += $prod;
+                $numQuery = "SELECT COUNT(*) AS tree_count
+                            FROM $db
+                            WHERE `species_groups` = $i
+                              AND `D30` > $cutting
+                              AND `species_groups` <= 5
+                              AND `species_groups` != 4
+                              AND `status` = 'KEEP'
+                              AND CASE
+                                  WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                                  WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                                  WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                                  WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                                  ELSE 5
+                              END = $j";
 
-                $treeCountResult = DB::table($db)
-                    ->select(
-                        DB::raw('COUNT(*) AS tree_count'),
-                        DB::raw("CASE
-                                    WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
-                                    WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
-                                    WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
-                                    WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
-                                    ELSE 5
-                                END AS diameter_range")
-                    )
-                    ->where('species_groups', $i)
-                    ->where('D30', '>', $cutting)
-                    ->where('species_groups', '<=', 5)
-                    ->where('species_groups', '!=', 4)
-                    ->having('diameter_range', $j)
-                    ->groupBy('diameter_range')
-                    ->first();
+                $prodResult = DB::select($prodQuery);
+                $numResult = DB::select($numQuery);
 
-                $tree_count = $treeCountResult ? $treeCountResult->tree_count : 0;
-                $groupData['tree_count'][$j] = round($tree_count / 100, 4);
-                $groupData['totaltree'] += $tree_count;
+                $groupData['prod'][] = $prodResult[0]->prod ?? 0;
+                $groupData['num'][] = $numResult[0]->tree_count ?? 0;
             }
 
-            $groupData['totalprod'] = round($groupData['totalprod'] / 100, 4);
-            $groupData['totaltree'] = round($groupData['totaltree'] / 100, 4);
-            $data[$i] = $groupData;
-            $totaltotalprod += $groupData['totalprod'];
-            $totaltotaltree += $groupData['totaltree'];
+            $data[] = $groupData;
+        }
+
+        // Calculate total totals
+        foreach ($data as $group) {
+            $totaltotalprod += array_sum($group['prod']);
+            $totaltotaltree += array_sum($group['num']);
         }
 
         return view('dashboard.stand.production30', [
             'db' => $db,
             'data' => $data,
-            'totaltotalprod' => round($totaltotalprod, 4),
-            'totaltotaltree' => round($totaltotaltree, 4)
+            'totaltotalprod' => $totaltotalprod,
+            'totaltotaltree' => $totaltotaltree,
         ]);
     }
 }

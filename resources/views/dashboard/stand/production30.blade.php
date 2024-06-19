@@ -45,30 +45,28 @@
                         <th>30 - 45</th>
                         <th>45 - 60</th>
                         <th>60+</th>
-                        <th>total</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($data as $group => $groupData)
+                    @foreach ($data as $group)
                         <tr>
-                            <th>Group {{ $group }}</th>
+                            <th>Group {{ $group['group'] }}</th>
                             <th>prod</th>
-                            @for ($i = 1; $i <= 5; $i++)
-                                <th>{{ $groupData['prod'][$i] ?? '0' }}</th>
-                            @endfor
-                            <th>{{ $groupData['totalprod'] }}</th>
+                            @foreach ($group['prod'] as $prod)
+                                <td>{{ round($prod / 100, 4) }}</td>
+                            @endforeach
+                            <th>{{ round(array_sum($group['prod']) / 100, 4) }}</th>
                         </tr>
                         <tr>
                             <th></th>
                             <th>Num</th>
-                            @for ($i = 1; $i <= 5; $i++)
-                                <th>{{ $groupData['tree_count'][$i] ?? '0' }}</th>
-                            @endfor
-                            <th>{{ $groupData['totaltree'] }}</th>
+                            @foreach ($group['num'] as $num)
+                                <td>{{ round($num / 100, 4) }}</td>
+                            @endforeach
+                            <th>{{ round(array_sum($group['num']) / 100, 4) }}</th>
                         </tr>
                     @endforeach
-                </tbody>
-                <tfoot>
                     <tr>
                         <th>TOTAL</th>
                         <th>PROD</th>
@@ -77,7 +75,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>{{ $totaltotalprod }}</th>
+                        <th>{{ round($totaltotalprod / 100, 4) }}</th>
                     </tr>
                     <tr>
                         <th></th>
@@ -87,9 +85,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>{{ $totaltotaltree }}</th>
+                        <th>{{ round($totaltotaltree / 100, 4) }}</th>
                     </tr>
-                </tfoot>
+                </tbody>
             </table>
         </div>
     </div>
