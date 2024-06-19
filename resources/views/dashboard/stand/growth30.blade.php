@@ -45,41 +45,51 @@
                         <th>30 - 45</th>
                         <th>45 - 60</th>
                         <th>60+</th>
-                        <th>Total</th>
+                        <th>total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($growthData as $group)
+                    @foreach ($data as $group => $groupData)
                         <tr>
-                            <td>Group {{ $group['group'] }}</td>
-                            <td>Growth</td>
-                            @foreach ($group['growth'] as $growth)
-                                <td>{{ number_format($growth / 100, 4) }}</td>
-                            @endforeach
-                            <td>{{ number_format($group['total_growth'], 4) }}</td>
+                            <th>Group {{ $group }}</th>
+                            <th>growth</th>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <th>{{ $groupData['growth'][$i] ?? '0' }}</th>
+                            @endfor
+                            <th>{{ $groupData['totalgrowth'] }}</th>
                         </tr>
                         <tr>
-                            <td></td>
-                            <td>Num</td>
-                            @foreach ($group['num'] as $num)
-                                <td>{{ number_format($num / 100, 4) }}</td>
-                            @endforeach
-                            <td>{{ number_format($group['total_num'], 4) }}</td>
+                            <th></th>
+                            <th>Num</th>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <th>{{ $groupData['tree_count'][$i] ?? '0' }}</th>
+                            @endfor
+                            <th>{{ $groupData['totaltree'] }}</th>
                         </tr>
                     @endforeach
-                    <tr>
-                        <td>TOTAL</td>
-                        <td>Growth</td>
-                        <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_growth'], 4) }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>NUM</td>
-                        <td colspan="5"></td>
-                        <td>{{ number_format($totals['total_tree'], 4) }}</td>
-                    </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>TOTAL</th>
+                        <th>growth</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ $totaltotalgrowth }}</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>NUM</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{ $totaltotaltree }}</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

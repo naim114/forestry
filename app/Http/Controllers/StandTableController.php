@@ -7,31 +7,6 @@ use DB;
 
 class StandTableController extends Controller
 {
-    // public function volume($db = 'trees')
-    // {
-    //     $trees = DB::table($db)
-    //         ->select(
-    //             'species_groups',
-    //             DB::raw("
-    //                 CASE
-    //                     WHEN diameter_dbh_cm BETWEEN 5 AND 14.999 THEN '5-15'
-    //                     WHEN diameter_dbh_cm BETWEEN 15 AND 29.999 THEN '15-30'
-    //                     WHEN diameter_dbh_cm BETWEEN 30 AND 44.999 THEN '30-45'
-    //                     WHEN diameter_dbh_cm BETWEEN 45 AND 59.999 THEN '45-60'
-    //                     ELSE '60+'
-    //                 END AS diameter_range"
-    //             ),
-    //             DB::raw('ROUND(SUM(volume_m3)/100, 4) AS avg_volume_perha'),
-    //             DB::raw('ROUND(COUNT(*)/100, 4) AS tree_count_perha')
-    //         )
-    //         ->groupBy('species_groups', 'diameter_range')
-    //         ->orderBy('species_groups', 'ASC')
-    //         ->orderBy('diameter_class')
-    //         ->get();
-
-    //     return view('dashboard.stand.volume', compact('db', 'trees'));
-    // }
-
     public function volume($db = 'trees')
     {
         $results = DB::table($db)
@@ -226,72 +201,75 @@ class StandTableController extends Controller
 
     public function growth30($db = 'trees')
     {
-        $speciesGroups = 7;
-        $diameterGroups = 5;
-        $growthData = [];
+        $species_groups = 7;
+        $d_group = 5;
+        $data = [];
+        $totaltotalgrowth = 0;
+        $totaltotaltree = 0;
 
-        $totalTotalGrowth = 0;
-        $totalTotalTree = 0;
+        for ($i = 1; $i <= $species_groups; $i++){
+            $groupData = [
+                'growth' => [],
+                'tree_count' => [],
+                'totalgrowth' => 0,
+                'totaltree' => 0
+            ];
 
-        for ($i = 1; $i <= $speciesGroups; $i++) {
-            $growthGroup = ['group' => $i, 'growth' => [], 'num' => [], 'total_growth' => 0, 'total_num' => 0];
-
-            $totalGrowth = 0;
-            $totalTree = 0;
-
-            for ($j = 1; $j <= $diameterGroups; $j++) {
+            for ($j = 1; $j <= $d_group; $j++){
                 $growthResult = DB::table($db)
-                    ->selectRaw('ROUND(SUM(`V30`), 4) AS growth, diameter_range')
-                    ->fromSub(function ($query) use ($i) {
-                        $query->selectRaw('`V30`, CASE
-                            WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
-                            WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
-                            WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
-                            WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
-                            ELSE 5
-                            END AS diameter_range')
-                            ->from('trees')
-                            ->where('species_groups', $i);
-                    }, 'subquery')
-                    ->where('diameter_range', $j)
+                    ->select(
+                        DB::raw('ROUND(SUM(`V30`), 4) AS growth'),
+                        DB::raw("CASE
+                                    WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                                    WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                                    WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                                    WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                                    ELSE 5
+                                END AS diameter_range")
+                    )
+                    ->where('species_groups', $i)
+                    ->having('diameter_range', $j)
+                    ->groupBy('diameter_range')
                     ->first();
 
-                $growthGroup['growth'][] = $growthResult->growth ?? 0;
-                $totalGrowth += $growthResult->growth ?? 0;
+                $growth = $growthResult ? $growthResult->growth : 0;
+                $groupData['growth'][$j] = round($growth / 100, 4);
+                $groupData['totalgrowth'] += $growth;
 
-                $countResult = DB::table($db)
-                    ->selectRaw('ROUND(COUNT(*), 4) AS tree_count, diameter_range')
-                    ->fromSub(function ($query) use ($i) {
-                        $query->selectRaw('`V30`, CASE
-                            WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
-                            WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
-                            WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
-                            WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
-                            ELSE 5
-                            END AS diameter_range')
-                            ->from('trees')
-                            ->where('species_groups', $i);
-                    }, 'subquery')
-                    ->where('diameter_range', $j)
+                $treeCountResult = DB::table($db)
+                    ->select(
+                        DB::raw('ROUND(COUNT(*), 4) AS tree_count'),
+                        DB::raw("CASE
+                                    WHEN `D30` BETWEEN 5 AND 14.999 THEN 1
+                                    WHEN `D30` BETWEEN 15 AND 29.999 THEN 2
+                                    WHEN `D30` BETWEEN 30 AND 44.999 THEN 3
+                                    WHEN `D30` BETWEEN 45 AND 59.999 THEN 4
+                                    ELSE 5
+                                END AS diameter_range")
+                    )
+                    ->where('species_groups', $i)
+                    ->having('diameter_range', $j)
+                    ->groupBy('diameter_range')
                     ->first();
 
-                $growthGroup['num'][] = $countResult->tree_count ?? 0;
-                $totalTree += $countResult->tree_count ?? 0;
+                $tree_count = $treeCountResult ? $treeCountResult->tree_count : 0;
+                $groupData['tree_count'][$j] = round($tree_count / 100, 4);
+                $groupData['totaltree'] += $tree_count;
             }
 
-            $growthGroup['total_growth'] = $totalGrowth / 100;
-            $growthGroup['total_num'] = $totalTree / 100;
-            $growthData[] = $growthGroup;
-            $totalTotalGrowth += $totalGrowth;
-            $totalTotalTree += $totalTree;
+            $groupData['totalgrowth'] = round($groupData['totalgrowth'] / 100, 4);
+            $groupData['totaltree'] = round($groupData['totaltree'] / 100, 4);
+            $data[$i] = $groupData;
+            $totaltotalgrowth += $groupData['totalgrowth'];
+            $totaltotaltree += $groupData['totaltree'];
         }
 
-        $totals = [
-            'total_growth' => $totalTotalGrowth / 100,
-            'total_tree' => $totalTotalTree / 100,
-        ];
-
-        return view('dashboard.stand.growth30', compact('db', 'growthData', 'totals'));
+        return view('dashboard.stand.growth30', [
+            'db' => $db,
+            'data' => $data,
+            'totaltotalgrowth' => round($totaltotalgrowth, 4),
+            'totaltotaltree' => round($totaltotaltree, 4)
+        ]);
     }
 
     public function production30($db = 'trees')
